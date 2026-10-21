@@ -1,0 +1,231 @@
+<!-- @dsCard group="Telas" page width=1360 height=2200 subtitle="Meu plano · sempre no tema claro" -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TelaPlanos</title>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(() => {
+  // src/react-shim.ts
+  var React = window.React, ReactDOM = window.ReactDOM;
+
+  // previews/_doc.tsx
+  var T = window.TOU, DOC_CSS = `
+html,body{margin:0;background:var(--bg-page);}
+body{font-family:var(--font-sans);color:var(--text);font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased;}
+.doc-theme{background:var(--bg-page);color:var(--text);padding:20px 24px 28px;}
+.doc-theme+.doc-theme{border-top:1px solid var(--border);}
+.doc-tl{display:flex;align-items:center;gap:8px;font-size:11px;line-height:16px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin:0 0 16px;}
+.doc-tl::after{content:"";flex:1;height:1px;background:var(--border);}
+.doc-h{font-size:13px;line-height:18px;font-weight:600;color:var(--text-secondary);margin:20px 0 10px;}
+.doc-h:first-of-type{margin-top:0;}
+.doc-matrix{display:grid;gap:12px 16px;align-items:center;overflow-x:auto;padding:4px;margin:-4px;}
+.doc-col{font-size:12px;line-height:16px;color:var(--text-tertiary);font-weight:500;}
+.doc-rl{font-size:12px;line-height:16px;color:var(--text-secondary);font-weight:500;}
+.doc-flex{display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+.doc-flex-top{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;}
+.doc-grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px;align-items:start;}
+.doc-grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 24px;align-items:start;}
+.doc-grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 20px;align-items:start;}
+@media (max-width:720px){.doc-grid2,.doc-grid3,.doc-grid4{grid-template-columns:1fr;}}
+.doc-cap{display:block;font-size:12px;line-height:16px;color:var(--text-tertiary);margin-top:6px;}
+.doc-box{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;}
+.doc-pad{padding-bottom:var(--doc-pad,0);}
+.doc-note{font-size:12px;line-height:16px;color:var(--text-secondary);margin-top:12px;display:flex;gap:6px;align-items:flex-start;}
+`;
+  var TODAY = new Date(2026, 9, 6);
+
+  // previews/_app.tsx
+  var {
+    Sidebar,
+    IconButton,
+    PageHeader,
+    Button,
+    Menu,
+    FilterBar,
+    DataTable,
+    EmptyState,
+    Avatar,
+    Badge,
+    Tag,
+    StatusDot,
+    Icon,
+    Modal,
+    TextField,
+    Select,
+    MultiSelect,
+    DateField,
+    Textarea,
+    Toast,
+    ConfirmDialog,
+    Drawer,
+    Combobox
+  } = T, LOGO = "/_blob/8f07a50b6138d5ca2a3a7814f73d9b41", LOGO_W = "/_blob/8f07a50b6138d5ca2a3a7814f73d9b41", TODAY2 = new Date(2026, 9, 6), FIRST = ["Mariana", "Rafael", "Beatriz", "Lucas", "Joana", "Pedro", "Camila", "Thiago", "Larissa", "Gustavo", "Fernanda", "Diego", "Aline", "Bruno", "Patrícia", "Rodrigo", "Juliana", "Eduardo", "Renata", "Marcelo", "Vanessa", "Felipe", "Priscila", "André"], LAST = ["Couto", "Nunes", "Lima", "Ferraz", "Prado", "Albuquerque", "Rocha", "Teixeira", "Barros", "Moura", "Siqueira", "Pacheco", "Antunes", "Viana", "Queiroz", "Freitas"], ORGS = ["Clínica Sorriso Pleno", "Studio Bem Estar", "Odonto Vida Santos", "Instituto Pele Viva"], STAGES = [["Lead", "primary"], ["Lead quente", "warning"], ["Agendado", "info"], ["Compareceu", "success"], ["Contrato", "success"], ["Sem etapa", "neutral"]], TAGS = [["Lead quente", "danger"], ["Retorno", "warning"], ["Cliente", "success"], ["Indicação", "primary"], ["Campanha outubro", "neutral"], ["Implante", "neutral"], ["Clareamento", "neutral"]], OWNERS = ["Ana Ribeiro", "Bruno Sales", "Carla Mendes", "Diego Torres"], QUEUES = ["Recepção", "Agendamentos", "Comercial", "Pós-venda"], CHANNELS = ["WhatsApp API", "WhatsApp API", "WhatsApp Web", "Instagram"], STATUSES = [["Em atendimento", "primary"], ["Pendente", "warning"], ["Concluído", "success"], ["Sem WhatsApp", "danger"]], UPDATED = ["há 2 min", "há 5 min", "há 18 min", "há 1 h", "há 3 h", "ontem", "04/10", "03/10", "01/10", "28/09"];
+  function strip(s) {
+    return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  }
+  var CONTACTS = Array.from({ length: 48 }, (_, i) => {
+    let org = i % 12 === 7 ? ORGS[i / 12 | 0] : null, name = org || `${FIRST[i % FIRST.length]} ${LAST[(i * 7 + 3) % LAST.length]}`, st = STAGES[(i * 5 + 1) % STAGES.length], ss = i % 11 === 4 ? STATUSES[3] : STATUSES[(i * 2 + (i >> 2)) % 3], tags = [];
+    i % 3 === 0 && tags.push(TAGS[i / 3 % TAGS.length | 0]), i % 4 === 1 && tags.push(TAGS[4]), i % 5 === 2 && !tags.find((t) => t[0] === TAGS[1][0]) && tags.push(TAGS[1]);
+    let n = 1001 + i * 137, ddd = i % 6 === 5 ? "11" : "13";
+    return {
+      id: `c${i + 1}`,
+      name,
+      phone: org ? `+55 (${ddd}) 3300-${String(1100 + i * 7).slice(-4)}` : `+55 (${ddd}) 99700-${String(n).slice(-4)}`,
+      email: i % 7 === 3 ? "" : `${strip(name).replace(/[^a-z ]/g, "").split(" ").slice(0, 2).join(".")}@${org ? "empresa.com.br" : "email.com"}`,
+      channel: CHANNELS[(i * 3 + 1) % CHANNELS.length],
+      stage: st[0],
+      stageTone: st[1],
+      tags,
+      owner: OWNERS[i * 3 % OWNERS.length],
+      queue: QUEUES[i * 5 % QUEUES.length],
+      value: st[0] === "Contrato" ? 4800 + i * 731 % 9e3 : st[0] === "Compareceu" ? 850 + i * 97 % 1500 : i % 4 === 0 ? 500 : 0,
+      updated: UPDATED[i % UPDATED.length],
+      status: ss[0],
+      statusTone: ss[1]
+    };
+  }), NAV = [
+    { items: [{ id: "inicio", label: "Início", icon: "house" }, { id: "central", label: "Atendimento", icon: "message-square", badge: 7 }] },
+    { label: "Relacionamento", items: [
+      { id: "contatos", label: "Contatos", icon: "contact", children: [{ id: "lista", label: "Lista de contatos" }, { id: "etapas", label: "Etapas (kanban)" }, { id: "etiquetas", label: "Etiquetas" }] },
+      { id: "filas", label: "Filas e equipes", icon: "headset" },
+      { id: "massa", label: "Mensagens em massa", icon: "send" }
+    ] },
+    { label: "Automação", items: [
+      { id: "integracoes", label: "Integrações", icon: "workflow" },
+      { id: "ia", label: "Automações e IA", icon: "bot", locked: !0, lockedHint: "Disponível no plano Pro" },
+      { id: "relatorios", label: "Relatórios", icon: "chart-column" }
+    ] },
+    { label: "Conta", items: [{ id: "empresa", label: "Minha empresa", icon: "building" }, { id: "plano", label: "Meu plano", icon: "credit-card" }, { id: "ajuda", label: "Ajuda", icon: "circle-question-mark" }] }
+  ], USER = { name: "Ana Ribeiro", org: "Clínica Sorriso Pleno", status: "online" };
+  function NavFooter() {
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(IconButton, { icon: "user", label: "Meu perfil", size: "sm" }), /* @__PURE__ */ React.createElement(IconButton, { icon: "moon", label: "Alternar tema", size: "sm" }), /* @__PURE__ */ React.createElement(IconButton, { icon: "bell", label: "Notificações", size: "sm", badge: 12 }), /* @__PURE__ */ React.createElement(IconButton, { icon: "settings", label: "Configurações", size: "sm" }), /* @__PURE__ */ React.createElement(IconButton, { icon: "log-out", label: "Sair", size: "sm" }));
+  }
+  function AppFrame({ theme, current, width = 1280, height = 1080, label, children }) {
+    let [collapsed, setCollapsed] = React.useState(!1), [cur, setCur] = React.useState(current);
+    return /* @__PURE__ */ React.createElement("div", { className: "scr-frame", "data-theme": theme, style: { width, height }, role: "region", "aria-label": label }, /* @__PURE__ */ React.createElement(Sidebar, { groups: NAV, current: cur, onNavigate: setCur, collapsed, onCollapsedChange: setCollapsed, logoSrc: theme === "dark" ? LOGO_W : LOGO, user: USER, footerActions: /* @__PURE__ */ React.createElement(NavFooter, null) }), /* @__PURE__ */ React.createElement("main", { className: "scr-main" }, children));
+  }
+  var SCREEN_CSS = `
+.scr-label{font-size:12px;line-height:16px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin:32px 0 12px;display:flex;gap:8px;align-items:center}
+.scr-label:first-child{margin-top:0}
+.scr-label span{font-weight:400;letter-spacing:0;text-transform:none;color:var(--text-secondary)}
+.scr-frame{position:relative;display:flex;overflow:hidden;background:var(--bg-page);color:var(--text);border:1px solid var(--border);border-radius:12px;font-family:var(--font-sans);box-shadow:0 1px 3px rgba(1,20,31,.08)}
+.scr-frame .tou-nav{flex:none}
+.scr-main{flex:1;min-width:0;overflow:auto;padding:32px;display:flex;flex-direction:column;gap:24px}
+.scr-phone{position:relative;display:flex;flex-direction:column;overflow:hidden;background:var(--bg-page);color:var(--text);border:1px solid var(--border);border-radius:28px;font-family:var(--font-sans)}
+.scr-appbar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;height:56px;padding:0 8px;background:var(--bg-surface);border-bottom:1px solid var(--border)}
+.scr-appbar img{height:22px;display:block}
+.scr-phone .scr-main{padding:16px;gap:16px}
+.scr-plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
+.scr-price{display:flex;align-items:baseline;gap:4px;margin:4px 0 12px}
+.scr-price b{font-size:30px;line-height:38px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.scr-price span{color:var(--text-secondary);font-size:13px;line-height:18px}
+.scr-feats{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.scr-feats li{display:flex;gap:8px;align-items:flex-start}
+.scr-feats li .tou-icon{color:var(--text-brand);margin-top:2px}
+.scr-feats li.off{color:var(--text-tertiary)}
+.scr-feats li.off .tou-icon{color:var(--text-tertiary)}
+.scr-usage{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.scr-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.scr-h2{margin:0;font-size:24px;line-height:32px;font-weight:600;letter-spacing:-.01em}
+.scr-toast{position:absolute;right:24px;bottom:24px;width:360px;z-index:60}
+.scr-cell-yes{display:inline-flex;align-items:center;gap:6px;color:var(--text)}
+.scr-cell-yes .tou-icon{color:var(--success)}
+.scr-cell-no{display:inline-flex;align-items:center;gap:6px;color:var(--text-tertiary)}
+`;
+  var FILTER_GROUPS = [
+    { id: "tags", label: "Etiquetas", options: TAGS.map(([t]) => ({ value: t, label: t })) },
+    { id: "stage", label: "Etapa", options: STAGES.map(([s]) => ({ value: s, label: s })) },
+    { id: "channel", label: "Canal", options: [{ value: "WhatsApp API", label: "WhatsApp API" }, { value: "WhatsApp Web", label: "WhatsApp Web" }, { value: "Instagram", label: "Instagram" }] },
+    { id: "owner", label: "Responsável", options: OWNERS.map((o) => ({ value: o, label: o })) }
+  ];
+
+  // previews/_screens.tsx
+  function mountScreen(node) {
+    let style = document.createElement("style");
+    style.textContent = DOC_CSS + SCREEN_CSS + "body{padding:32px 40px 48px;background:var(--bg-page)}", document.head.appendChild(style), document.documentElement.setAttribute("data-theme", "light"), ReactDOM.createRoot(document.getElementById("root")).render(node);
+  }
+  function Label({ children, note }) {
+    return /* @__PURE__ */ React.createElement("p", { className: "scr-label" }, children, note ? /* @__PURE__ */ React.createElement("span", null, "· ", note) : null);
+  }
+
+  // previews/TelaPlanos.tsx
+  var { PageHeader: PageHeader2, Card, Button: Button2, Badge: Badge2, ProgressBar, Alert, SegmentedControl, DataTable: DataTable2, Accordion, Icon: Icon2, ConfirmDialog: ConfirmDialog2, Toast: Toast2, Link } = T, PLANS = [
+    { id: "essencial", name: "Essencial", desc: "Para clínicas começando a organizar o WhatsApp.", month: 297, users: "3 atendentes", convs: "10.000 conversas/mês", feats: ["1 número de WhatsApp", "Funil de vendas (kanban)", "Mensagens em massa", "Integração com agenda"], off: ["Automações e IA", "Relatórios avançados"] },
+    { id: "pro", name: "Pro", desc: "Para equipes que atendem e vendem o dia todo.", month: 597, users: "10 atendentes", convs: "50.000 conversas/mês", feats: ["3 números de WhatsApp", "Tudo do Essencial", "Automações e chatbot", "Assistente de IA no atendimento", "Relatórios e BI"], off: [] },
+    { id: "enterprise", name: "Enterprise", desc: "Para redes e grupos com várias unidades.", month: null, users: "Atendentes ilimitados", convs: "Conversas sob medida", feats: ["Números ilimitados", "Tudo do Pro", "API e webhooks", "Gerente de conta", "SLA de suporte"], off: [] }
+  ], yes = (t = "Incluído") => /* @__PURE__ */ React.createElement("span", { className: "scr-cell-yes" }, /* @__PURE__ */ React.createElement(Icon2, { name: "check", size: 16, label: t }), /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true" }, t === "Incluído" ? "" : t)), no = /* @__PURE__ */ React.createElement("span", { className: "scr-cell-no" }, /* @__PURE__ */ React.createElement(Icon2, { name: "minus", size: 16, label: "Não incluído" })), ROWS = [
+    { id: "r1", feat: "Atendentes", e: "3", p: "10", x: "Ilimitados" },
+    { id: "r2", feat: "Conversas por mês", e: "10.000", p: "50.000", x: "Sob medida" },
+    { id: "r3", feat: "Números de WhatsApp", e: "1", p: "3", x: "Ilimitados" },
+    { id: "r4", feat: "Funil de vendas e etiquetas", e: !0, p: !0, x: !0 },
+    { id: "r5", feat: "Mensagens em massa", e: !0, p: !0, x: !0 },
+    { id: "r6", feat: "Automações e chatbot", e: !1, p: !0, x: !0 },
+    { id: "r7", feat: "Assistente de IA", e: !1, p: !0, x: !0 },
+    { id: "r8", feat: "Relatórios e BI", e: !1, p: !0, x: !0 },
+    { id: "r9", feat: "API e webhooks", e: !1, p: !1, x: !0 }
+  ], cell = (v) => v === !0 ? yes() : v === !1 ? no : /* @__PURE__ */ React.createElement("span", { className: "tou-mono", style: { fontFamily: "var(--font-sans)", fontSize: 14 } }, v), COLS = [
+    { key: "feat", header: "Recurso", render: (r) => /* @__PURE__ */ React.createElement("span", { style: { fontWeight: 500 } }, r.feat) },
+    { key: "e", header: "Essencial (atual)", render: (r) => cell(r.e) },
+    { key: "p", header: "Pro", render: (r) => cell(r.p) },
+    { key: "x", header: "Enterprise", render: (r) => cell(r.x) }
+  ], FAQ = [
+    { id: "f1", title: "Posso mudar de plano quando quiser?", content: "Sim. No upgrade, você paga só a diferença proporcional até a próxima renovação. No downgrade, a mudança vale a partir da próxima fatura." },
+    { id: "f2", title: "Como funciona o desconto do plano anual?", content: "O plano anual é cobrado de uma vez, com 15% de desconto sobre 12 mensalidades. Dá para trocar para mensal na renovação." },
+    { id: "f3", title: "O que acontece se eu passar do limite de conversas?", content: "Nada para de funcionar. Avisamos quando você chegar a 80% e 100%; as conversas extras são cobradas por pacote na fatura seguinte." },
+    { id: "f4", title: "Como cancelo a assinatura?", content: "Em Minha empresa › Assinatura. O acesso continua até o fim do período já pago e seus contatos podem ser exportados." }
+  ], brl = (n) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 0 });
+  function Plans({ startConfirm = !1, startToast = !1, startPeriod = "mensal" }) {
+    let [period, setPeriod] = React.useState(startPeriod), [faq, setFaq] = React.useState(["f1"]), [confirm, setConfirm] = React.useState(startConfirm), [toast, setToast] = React.useState(startToast), [current, setCurrent] = React.useState(startToast ? "pro" : "essencial"), price = (m) => m == null ? null : period === "anual" ? Math.round(m * 0.85) : m;
+    return /* @__PURE__ */ React.createElement(AppFrame, { theme: "light", current: "plano", label: `Meu plano${startConfirm ? ", confirmando upgrade" : ""}`, height: startConfirm || startToast ? 760 : 1960 }, /* @__PURE__ */ React.createElement(PageHeader2, { title: "Meu plano", subtitle: "Assinatura, uso do mês e forma de pagamento da Clínica Sorriso Pleno.", actions: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Button2, { variant: "tertiary", iconStart: "file-text" }, "Ver faturas"), /* @__PURE__ */ React.createElement(Button2, { variant: "secondary", iconStart: "credit-card" }, "Forma de pagamento")) }), /* @__PURE__ */ React.createElement(
+      Card,
+      {
+        variant: "plain",
+        title: /* @__PURE__ */ React.createElement("span", { style: { display: "inline-flex", gap: 8, alignItems: "center" } }, "Plano ", current === "pro" ? "Pro" : "Essencial", " ", /* @__PURE__ */ React.createElement(Badge2, { tone: "success", icon: "check" }, "Ativo")),
+        subtitle: `Mensal · ${brl(current === "pro" ? 597 : 297)}/mês · renova em 02/11/2026`,
+        footer: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Icon2, { name: "info", size: 16 }), /* @__PURE__ */ React.createElement("span", null, "O uso zera no dia da renovação."))
+      },
+      /* @__PURE__ */ React.createElement("div", { className: "scr-usage" }, /* @__PURE__ */ React.createElement(ProgressBar, { label: "Atendentes", value: current === "pro" ? 30 : 100, tone: current === "pro" ? "primary" : "danger", help: current === "pro" ? "3 de 10" : "3 de 3 · limite atingido" }), /* @__PURE__ */ React.createElement(ProgressBar, { label: "Conversas no mês", value: current === "pro" ? 16 : 82, help: current === "pro" ? "8.200 de 50.000" : "8.200 de 10.000" }), /* @__PURE__ */ React.createElement(ProgressBar, { label: "Números de WhatsApp", value: current === "pro" ? 33 : 100, help: current === "pro" ? "1 de 3" : "1 de 1" }))
+    ), current === "essencial" ? /* @__PURE__ */ React.createElement(Alert, { tone: "warning", title: "Você atingiu o limite de atendentes do plano Essencial.", actions: /* @__PURE__ */ React.createElement(Button2, { variant: "secondary", size: "sm", onClick: () => setConfirm(!0) }, "Ver plano Pro") }, "Para convidar mais pessoas, mude para o Pro ou remova um atendente em Filas e equipes.") : null, /* @__PURE__ */ React.createElement("div", { className: "scr-row" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", { className: "scr-h2" }, "Planos"), /* @__PURE__ */ React.createElement("p", { style: { margin: "4px 0 0", color: "var(--text-secondary)" } }, "Valores sem impostos. Você pode mudar quando quiser.")), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, alignItems: "center" } }, /* @__PURE__ */ React.createElement(SegmentedControl, { label: "Período de cobrança", value: period, onChange: setPeriod, options: [{ value: "mensal", label: "Mensal" }, { value: "anual", label: "Anual" }] }), /* @__PURE__ */ React.createElement(Badge2, { tone: "success" }, "Anual: −15%"))), /* @__PURE__ */ React.createElement("div", { className: "scr-plans" }, PLANS.map((pl) => {
+      let isCur = pl.id === current, pr = price(pl.month);
+      return /* @__PURE__ */ React.createElement(
+        Card,
+        {
+          key: pl.id,
+          variant: pl.id === "pro" ? "elevated" : "plain",
+          highlighted: pl.id === "pro" && !isCur,
+          title: /* @__PURE__ */ React.createElement("span", { style: { display: "inline-flex", gap: 8, alignItems: "center" } }, pl.name, isCur ? /* @__PURE__ */ React.createElement(Badge2, { tone: "neutral" }, "Plano atual") : pl.id === "pro" ? /* @__PURE__ */ React.createElement(Badge2, { tone: "primary", solid: !0, icon: "star" }, "Recomendado") : null),
+          subtitle: pl.desc,
+          footer: isCur ? /* @__PURE__ */ React.createElement(Button2, { variant: "secondary", block: !0, disabled: !0 }, "Seu plano atual") : pl.id === "enterprise" ? /* @__PURE__ */ React.createElement(Button2, { variant: "secondary", block: !0, iconStart: "message-square" }, "Falar com vendas") : /* @__PURE__ */ React.createElement(Button2, { block: !0, variant: current === "pro" ? "secondary" : "primary", onClick: () => setConfirm(!0) }, "Mudar para o ", pl.name)
+        },
+        /* @__PURE__ */ React.createElement("div", { className: "scr-price" }, pr == null ? /* @__PURE__ */ React.createElement("b", null, "Sob consulta") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("b", null, brl(pr)), /* @__PURE__ */ React.createElement("span", null, "/mês", period === "anual" ? ", cobrado anualmente" : ""))),
+        /* @__PURE__ */ React.createElement("ul", { className: "scr-feats" }, /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement(Icon2, { name: "users", size: 16 }), /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement("b", { style: { fontWeight: 600 } }, pl.users))), /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement(Icon2, { name: "message-square", size: 16 }), /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement("b", { style: { fontWeight: 600 } }, pl.convs))), pl.feats.map((f) => /* @__PURE__ */ React.createElement("li", { key: f }, /* @__PURE__ */ React.createElement(Icon2, { name: "check", size: 16 }), /* @__PURE__ */ React.createElement("span", null, f))), pl.off.map((f) => /* @__PURE__ */ React.createElement("li", { key: f, className: "off" }, /* @__PURE__ */ React.createElement(Icon2, { name: "minus", size: 16, label: "Não incluído:" }), /* @__PURE__ */ React.createElement("span", null, f))))
+      );
+    })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", { className: "scr-h2", style: { marginBottom: 12 } }, "Compare os recursos"), /* @__PURE__ */ React.createElement(DataTable2, { caption: "Comparação de recursos por plano", columns: COLS, rows: ROWS, rowKey: (r) => r.id, density: "dense", layout: "table" })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", { className: "scr-h2", style: { marginBottom: 12 } }, "Dúvidas sobre planos"), /* @__PURE__ */ React.createElement(Accordion, { items: FAQ, value: faq, onChange: setFaq, headingLevel: 3 }), /* @__PURE__ */ React.createElement("p", { style: { margin: "16px 0 0", color: "var(--text-secondary)" } }, "Ainda com dúvida? ", /* @__PURE__ */ React.createElement(Link, { href: "#" }, "Fale com o suporte"), ".")), /* @__PURE__ */ React.createElement(
+      ConfirmDialog2,
+      {
+        contained: !0,
+        open: confirm,
+        tone: "primary",
+        onClose: () => setConfirm(!1),
+        title: "Mudar para o plano Pro?",
+        description: /* @__PURE__ */ React.createElement(React.Fragment, null, "Você paga ", /* @__PURE__ */ React.createElement("b", null, brl(300)), " proporcionais hoje e ", /* @__PURE__ */ React.createElement("b", null, brl(597), "/mês"), " a partir de 02/11/2026. Os limites sobem na hora."),
+        confirmLabel: "Confirmar mudança",
+        onConfirm: () => {
+          setConfirm(!1), setCurrent("pro"), setToast(!0);
+        }
+      }
+    ), toast ? /* @__PURE__ */ React.createElement("div", { className: "scr-toast" }, /* @__PURE__ */ React.createElement(Toast2, { tone: "success", title: "Plano alterado para Pro", description: "Agora você pode convidar até 10 atendentes.", onClose: () => setToast(!1), duration: startToast ? 0 : 5e3 })) : null);
+  }
+  mountScreen(
+    /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Label, { note: "parte do produto, sempre no tema claro (mesmo para quem usa o escuro); só componentes e tokens do produto, sem serif nem papéis do marketing. Valores ilustrativos" }, "Meu plano · claro"), /* @__PURE__ */ React.createElement(Plans, null), /* @__PURE__ */ React.createElement(Label, { note: "“Mudar para o Pro” confirma antes, com o valor proporcional" }, "Confirmação de mudança"), /* @__PURE__ */ React.createElement(Plans, { startConfirm: !0 }), /* @__PURE__ */ React.createElement(Label, { note: "depois de confirmar: plano atualizado, uso recalculado e toast" }, "Plano alterado · cobrança anual"), /* @__PURE__ */ React.createElement(Plans, { startToast: !0, startPeriod: "anual" }))
+  );
+})();
+
+</script>
+</body>
+</html>

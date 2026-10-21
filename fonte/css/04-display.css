@@ -1,0 +1,100 @@
+/* ---------- Badge (status) ---------- */
+.tou-badge { display: inline-flex; align-items: center; gap: var(--space-1); height: 20px; padding: 0 var(--space-2); border-radius: var(--radius-pill); font-family: var(--font-sans); font-size: 12px; line-height: 16px; font-weight: 500; white-space: nowrap; vertical-align: middle; }
+.tou-badge .tou-icon { width: 12px; height: 12px; stroke-width: 2.5; margin-left: -2px; }
+.tou-badge--neutral { background: var(--bg-hover); color: var(--text-secondary); }
+.tou-badge--primary, .tou-badge--info { background: var(--primary-soft); color: var(--text-brand); }
+.tou-badge--success { background: var(--success-soft); color: var(--success); }
+.tou-badge--warning { background: var(--warning-soft); color: var(--warning); }
+.tou-badge--danger { background: var(--danger-soft); color: var(--danger); }
+.tou-badge--solid.tou-badge--neutral { background: var(--text-secondary); color: var(--bg-surface); }
+.tou-badge--solid.tou-badge--primary, .tou-badge--solid.tou-badge--info { background: var(--primary); color: var(--text-on-primary); }
+.tou-badge--solid.tou-badge--success { background: var(--success-solid); color: var(--on-success); }
+.tou-badge--solid.tou-badge--warning { background: var(--warning-solid); color: var(--on-warning); }
+.tou-badge--solid.tou-badge--danger { background: var(--danger-solid); color: var(--on-danger); }
+.tou-badge--count { min-width: 20px; justify-content: center; padding: 0 var(--space-1\.5); font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.tou-badge--ring { box-shadow: 0 0 0 2px var(--bg-surface); }
+
+/* ponto de status: sempre com texto */
+.tou-status { display: inline-flex; align-items: center; gap: var(--space-1\.5); font-family: var(--font-sans); font-size: 13px; line-height: 18px; color: var(--text-secondary); white-space: nowrap; }
+.tou-status__dot { width: 8px; height: 8px; border-radius: var(--radius-pill); flex: none; background: var(--text-tertiary); }
+.tou-status--success .tou-status__dot { background: var(--success); }
+.tou-status--warning .tou-status__dot { background: var(--warning); }
+.tou-status--danger .tou-status__dot { background: var(--danger); }
+.tou-status--primary .tou-status__dot, .tou-status--info .tou-status__dot { background: var(--text-brand); }
+.tou-status--neutral .tou-status__dot { background: transparent; box-shadow: inset 0 0 0 2px var(--text-tertiary); }
+
+/* ---------- Tag (etiqueta aplicada a contato/conversa) ---------- */
+.tou-tag { display: inline-flex; align-items: center; gap: var(--space-1); height: 24px; padding: 0 var(--space-2); border-radius: var(--radius-pill); border: 1px solid transparent; font-family: var(--font-sans); font-size: 12px; line-height: 16px; font-weight: 500; white-space: nowrap; max-width: 100%; }
+.tou-tag__label { overflow: hidden; text-overflow: ellipsis; }
+.tou-tag--sm { height: 20px; padding: 0 var(--space-1\.5); }
+.tou-tag--neutral { background: var(--bg-hover); color: var(--text); border-color: var(--border); }
+.tou-tag--primary, .tou-tag--info { background: var(--primary-soft); color: var(--text-brand); border-color: var(--border-brand); }
+.tou-tag--success { background: var(--success-soft); color: var(--success); border-color: var(--success); }
+.tou-tag--warning { background: var(--warning-soft); color: var(--warning); border-color: var(--warning); }
+.tou-tag--danger { background: var(--danger-soft); color: var(--danger); border-color: var(--danger); }
+.tou-tag--solid.tou-tag--neutral { background: var(--text-secondary); color: var(--bg-surface); border-color: transparent; }
+.tou-tag--solid.tou-tag--primary, .tou-tag--solid.tou-tag--info { background: var(--primary); color: var(--text-on-primary); border-color: transparent; }
+.tou-tag--solid.tou-tag--success { background: var(--success-solid); color: var(--on-success); border-color: transparent; }
+.tou-tag--solid.tou-tag--warning { background: var(--warning-solid); color: var(--on-warning); border-color: transparent; }
+.tou-tag--solid.tou-tag--danger { background: var(--danger-solid); color: var(--on-danger); border-color: transparent; }
+.tou-tag__remove { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; margin-right: -4px; padding: 0; border: 0; border-radius: var(--radius-pill); background: transparent; color: inherit; cursor: pointer; }
+.tou-tag__remove::before { content: ""; position: absolute; width: 24px; height: 24px; }
+.tou-tag__remove { position: relative; }
+.tou-tag__remove:hover, .tou-tag__remove.is-hover { background: rgba(1, 20, 31, .12); }
+[data-theme="dark"] .tou-tag__remove:hover, [data-theme="navy"] .tou-tag__remove:hover, [data-theme="dark"] .tou-tag__remove.is-hover { background: rgba(255, 255, 255, .16); }
+.tou-tag__remove:focus-visible, .tou-tag__remove.is-focus { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
+.tou-tag__remove .tou-icon { width: 12px; height: 12px; stroke-width: 2.5; }
+.tou-tag.is-disabled { background: var(--bg-disabled); color: var(--text-disabled); border-color: var(--border); }
+
+/* ---------- Chip (filtro / seleção) ---------- */
+.tou-chip {
+  display: inline-flex; align-items: center; gap: var(--space-1\.5); height: 32px; padding: 0 var(--space-3); flex: none;
+  border: 1px solid var(--border); border-radius: var(--radius-pill); background: var(--bg-surface); color: var(--text-secondary);
+  font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 500; white-space: nowrap; cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard);
+}
+.tou-chip .tou-icon { width: 16px; height: 16px; }
+.tou-chip:hover:not(:disabled), .tou-chip.is-hover { background: var(--bg-hover); color: var(--text); border-color: var(--border-control); }
+.tou-chip:active:not(:disabled), .tou-chip.is-active { background: var(--bg-pressed); }
+.tou-chip:focus-visible, .tou-chip.is-focus { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.tou-chip[aria-pressed="true"], .tou-chip.is-selected { background: var(--primary-soft); border-color: var(--border-brand); color: var(--text-brand); }
+.tou-chip[aria-pressed="true"]:hover, .tou-chip.is-selected.is-hover { background: var(--primary-soft-pressed); color: var(--text-brand-pressed); }
+.tou-chip:disabled { color: var(--text-disabled); background: var(--bg-disabled); cursor: not-allowed; }
+.tou-chip__count { font-family: var(--font-mono); font-size: 12px; line-height: 16px; color: inherit; opacity: 1; }
+/* chip de filtro ativo: rótulo + valor + remover */
+.tou-chip--filter { cursor: default; padding-right: var(--space-1); background: var(--primary-soft); border-color: var(--border-brand); color: var(--text-brand); }
+.tou-chip--filter .tou-chip__key { color: var(--text-secondary); font-weight: 400; }
+.tou-chip--filter .tou-chip__remove { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border: 0; border-radius: var(--radius-pill); background: transparent; color: inherit; cursor: pointer; }
+.tou-chip--filter .tou-chip__remove:hover, .tou-chip--filter .tou-chip__remove.is-hover { background: var(--primary-soft-pressed); color: var(--text-brand-pressed); }
+.tou-chip--filter .tou-chip__remove:focus-visible, .tou-chip--filter .tou-chip__remove.is-focus { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
+.tou-chip--filter .tou-chip__remove .tou-icon { width: 14px; height: 14px; }
+
+/* ---------- Avatar ---------- */
+.tou-avatar { position: relative; display: inline-grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: var(--radius-pill); background: var(--primary-soft); color: var(--text-brand); font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 600; letter-spacing: .02em; user-select: none; }
+.tou-avatar img { width: 100%; height: 100%; border-radius: inherit; object-fit: cover; display: block; }
+.tou-avatar--xs { width: 24px; height: 24px; font-size: 11px; line-height: 16px; }
+.tou-avatar--sm { width: 32px; height: 32px; font-size: 12px; line-height: 16px; }
+.tou-avatar--lg { width: 48px; height: 48px; font-size: 16px; line-height: 24px; }
+.tou-avatar--icon { background: var(--bg-hover); color: var(--text-secondary); }
+.tou-avatar--icon .tou-icon { width: 55%; height: 55%; }
+.tou-avatar__status { position: absolute; right: -1px; bottom: -1px; width: 30%; height: 30%; min-width: 8px; min-height: 8px; border-radius: var(--radius-pill); box-shadow: 0 0 0 2px var(--bg-surface); background: var(--text-tertiary); }
+.tou-avatar__status--online { background: var(--success); }
+.tou-avatar__status--away { background: var(--warning); }
+.tou-avatar__status--busy { background: var(--danger); }
+.tou-avatar__status--offline { background: var(--bg-surface); box-shadow: 0 0 0 2px var(--bg-surface), inset 0 0 0 2px var(--text-tertiary); }
+
+/* ---------- Estado vazio ---------- */
+.tou-empty { display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-2); padding: var(--space-12) var(--space-6); font-family: var(--font-sans); color: var(--text); }
+.tou-empty__art { display: grid; place-items: center; width: 56px; height: 56px; border-radius: var(--radius-pill); background: var(--primary-soft); color: var(--text-brand); margin-bottom: var(--space-2); }
+.tou-empty__art .tou-icon { width: 24px; height: 24px; }
+.tou-empty__art--neutral { background: var(--bg-sunken); color: var(--text-secondary); box-shadow: inset 0 0 0 1px var(--border); }
+.tou-empty__art--danger { background: var(--danger-soft); color: var(--danger); }
+.tou-empty__title { margin: 0; font-size: 18px; line-height: 26px; font-weight: 600; }
+.tou-empty__desc { margin: 0; max-width: 400px; font-size: 14px; line-height: 20px; color: var(--text-secondary); }
+.tou-empty__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2); margin-top: var(--space-3); }
+.tou-empty--compact { flex-direction: row; text-align: left; align-items: center; gap: var(--space-3); padding: var(--space-6) var(--space-4); justify-content: center; }
+.tou-empty--compact .tou-empty__art { width: 40px; height: 40px; margin: 0; }
+.tou-empty--compact .tou-empty__art .tou-icon { width: 20px; height: 20px; }
+.tou-empty--compact .tou-empty__title { font-size: 14px; line-height: 20px; }
+.tou-empty--compact .tou-empty__desc { font-size: 13px; line-height: 18px; }
+.tou-empty--compact .tou-empty__actions { margin: 0 0 0 var(--space-3); }

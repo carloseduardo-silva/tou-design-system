@@ -1,0 +1,344 @@
+<!-- @dsCard group="Telas" page width=1360 height=2900 subtitle="Lista com filtros, chips ativos, seleção, paginação e vazio · claro e escuro" -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TelaContatos</title>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(() => {
+  // src/react-shim.ts
+  var React = window.React, ReactDOM = window.ReactDOM;
+
+  // previews/_doc.tsx
+  var T = window.TOU, DOC_CSS = `
+html,body{margin:0;background:var(--bg-page);}
+body{font-family:var(--font-sans);color:var(--text);font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased;}
+.doc-theme{background:var(--bg-page);color:var(--text);padding:20px 24px 28px;}
+.doc-theme+.doc-theme{border-top:1px solid var(--border);}
+.doc-tl{display:flex;align-items:center;gap:8px;font-size:11px;line-height:16px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin:0 0 16px;}
+.doc-tl::after{content:"";flex:1;height:1px;background:var(--border);}
+.doc-h{font-size:13px;line-height:18px;font-weight:600;color:var(--text-secondary);margin:20px 0 10px;}
+.doc-h:first-of-type{margin-top:0;}
+.doc-matrix{display:grid;gap:12px 16px;align-items:center;overflow-x:auto;padding:4px;margin:-4px;}
+.doc-col{font-size:12px;line-height:16px;color:var(--text-tertiary);font-weight:500;}
+.doc-rl{font-size:12px;line-height:16px;color:var(--text-secondary);font-weight:500;}
+.doc-flex{display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+.doc-flex-top{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;}
+.doc-grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px;align-items:start;}
+.doc-grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 24px;align-items:start;}
+.doc-grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 20px;align-items:start;}
+@media (max-width:720px){.doc-grid2,.doc-grid3,.doc-grid4{grid-template-columns:1fr;}}
+.doc-cap{display:block;font-size:12px;line-height:16px;color:var(--text-tertiary);margin-top:6px;}
+.doc-box{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;}
+.doc-pad{padding-bottom:var(--doc-pad,0);}
+.doc-note{font-size:12px;line-height:16px;color:var(--text-secondary);margin-top:12px;display:flex;gap:6px;align-items:flex-start;}
+`;
+  var TODAY = new Date(2026, 9, 6);
+
+  // previews/_app.tsx
+  var {
+    Sidebar,
+    IconButton,
+    PageHeader,
+    Button,
+    Menu,
+    FilterBar,
+    DataTable,
+    EmptyState,
+    Avatar,
+    Badge,
+    Tag,
+    StatusDot,
+    Icon,
+    Modal,
+    TextField,
+    Select,
+    MultiSelect,
+    DateField,
+    Textarea,
+    Toast,
+    ConfirmDialog,
+    Drawer,
+    Combobox
+  } = T, LOGO = "/_blob/8f07a50b6138d5ca2a3a7814f73d9b41", LOGO_W = "/_blob/8f07a50b6138d5ca2a3a7814f73d9b41", TODAY2 = new Date(2026, 9, 6), FIRST = ["Mariana", "Rafael", "Beatriz", "Lucas", "Joana", "Pedro", "Camila", "Thiago", "Larissa", "Gustavo", "Fernanda", "Diego", "Aline", "Bruno", "Patrícia", "Rodrigo", "Juliana", "Eduardo", "Renata", "Marcelo", "Vanessa", "Felipe", "Priscila", "André"], LAST = ["Couto", "Nunes", "Lima", "Ferraz", "Prado", "Albuquerque", "Rocha", "Teixeira", "Barros", "Moura", "Siqueira", "Pacheco", "Antunes", "Viana", "Queiroz", "Freitas"], ORGS = ["Clínica Sorriso Pleno", "Studio Bem Estar", "Odonto Vida Santos", "Instituto Pele Viva"], STAGES = [["Lead", "primary"], ["Lead quente", "warning"], ["Agendado", "info"], ["Compareceu", "success"], ["Contrato", "success"], ["Sem etapa", "neutral"]], TAGS = [["Lead quente", "danger"], ["Retorno", "warning"], ["Cliente", "success"], ["Indicação", "primary"], ["Campanha outubro", "neutral"], ["Implante", "neutral"], ["Clareamento", "neutral"]], OWNERS = ["Ana Ribeiro", "Bruno Sales", "Carla Mendes", "Diego Torres"], QUEUES = ["Recepção", "Agendamentos", "Comercial", "Pós-venda"], CHANNELS = ["WhatsApp API", "WhatsApp API", "WhatsApp Web", "Instagram"], STATUSES = [["Em atendimento", "primary"], ["Pendente", "warning"], ["Concluído", "success"], ["Sem WhatsApp", "danger"]], UPDATED = ["há 2 min", "há 5 min", "há 18 min", "há 1 h", "há 3 h", "ontem", "04/10", "03/10", "01/10", "28/09"];
+  function strip(s) {
+    return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  }
+  var CONTACTS = Array.from({ length: 48 }, (_, i) => {
+    let org = i % 12 === 7 ? ORGS[i / 12 | 0] : null, name = org || `${FIRST[i % FIRST.length]} ${LAST[(i * 7 + 3) % LAST.length]}`, st = STAGES[(i * 5 + 1) % STAGES.length], ss = i % 11 === 4 ? STATUSES[3] : STATUSES[(i * 2 + (i >> 2)) % 3], tags = [];
+    i % 3 === 0 && tags.push(TAGS[i / 3 % TAGS.length | 0]), i % 4 === 1 && tags.push(TAGS[4]), i % 5 === 2 && !tags.find((t) => t[0] === TAGS[1][0]) && tags.push(TAGS[1]);
+    let n = 1001 + i * 137, ddd = i % 6 === 5 ? "11" : "13";
+    return {
+      id: `c${i + 1}`,
+      name,
+      phone: org ? `+55 (${ddd}) 3300-${String(1100 + i * 7).slice(-4)}` : `+55 (${ddd}) 99700-${String(n).slice(-4)}`,
+      email: i % 7 === 3 ? "" : `${strip(name).replace(/[^a-z ]/g, "").split(" ").slice(0, 2).join(".")}@${org ? "empresa.com.br" : "email.com"}`,
+      channel: CHANNELS[(i * 3 + 1) % CHANNELS.length],
+      stage: st[0],
+      stageTone: st[1],
+      tags,
+      owner: OWNERS[i * 3 % OWNERS.length],
+      queue: QUEUES[i * 5 % QUEUES.length],
+      value: st[0] === "Contrato" ? 4800 + i * 731 % 9e3 : st[0] === "Compareceu" ? 850 + i * 97 % 1500 : i % 4 === 0 ? 500 : 0,
+      updated: UPDATED[i % UPDATED.length],
+      status: ss[0],
+      statusTone: ss[1]
+    };
+  }), NAV = [
+    { items: [{ id: "inicio", label: "Início", icon: "house" }, { id: "central", label: "Atendimento", icon: "message-square", badge: 7 }] },
+    { label: "Relacionamento", items: [
+      { id: "contatos", label: "Contatos", icon: "contact", children: [{ id: "lista", label: "Lista de contatos" }, { id: "etapas", label: "Etapas (kanban)" }, { id: "etiquetas", label: "Etiquetas" }] },
+      { id: "filas", label: "Filas e equipes", icon: "headset" },
+      { id: "massa", label: "Mensagens em massa", icon: "send" }
+    ] },
+    { label: "Automação", items: [
+      { id: "integracoes", label: "Integrações", icon: "workflow" },
+      { id: "ia", label: "Automações e IA", icon: "bot", locked: !0, lockedHint: "Disponível no plano Pro" },
+      { id: "relatorios", label: "Relatórios", icon: "chart-column" }
+    ] },
+    { label: "Conta", items: [{ id: "empresa", label: "Minha empresa", icon: "building" }, { id: "plano", label: "Meu plano", icon: "credit-card" }, { id: "ajuda", label: "Ajuda", icon: "circle-question-mark" }] }
+  ], USER = { name: "Ana Ribeiro", org: "Clínica Sorriso Pleno", status: "online" };
+  function NavFooter() {
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(IconButton, { icon: "user", label: "Meu perfil", size: "sm" }), /* @__PURE__ */ React.createElement(IconButton, { icon: "moon", label: "Alternar tema", size: "sm" }), /* @__PURE__ */ React.createElement(IconButton, { icon: "bell", label: "Notificações", size: "sm", badge: 12 }), /* @__PURE__ */ React.createElement(IconButton, { icon: "settings", label: "Configurações", size: "sm" }), /* @__PURE__ */ React.createElement(IconButton, { icon: "log-out", label: "Sair", size: "sm" }));
+  }
+  function AppFrame({ theme, current, width = 1280, height = 1080, label, children }) {
+    let [collapsed, setCollapsed] = React.useState(!1), [cur, setCur] = React.useState(current);
+    return /* @__PURE__ */ React.createElement("div", { className: "scr-frame", "data-theme": theme, style: { width, height }, role: "region", "aria-label": label }, /* @__PURE__ */ React.createElement(Sidebar, { groups: NAV, current: cur, onNavigate: setCur, collapsed, onCollapsedChange: setCollapsed, logoSrc: theme === "dark" ? LOGO_W : LOGO, user: USER, footerActions: /* @__PURE__ */ React.createElement(NavFooter, null) }), /* @__PURE__ */ React.createElement("main", { className: "scr-main" }, children));
+  }
+  var SCREEN_CSS = `
+.scr-label{font-size:12px;line-height:16px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin:32px 0 12px;display:flex;gap:8px;align-items:center}
+.scr-label:first-child{margin-top:0}
+.scr-label span{font-weight:400;letter-spacing:0;text-transform:none;color:var(--text-secondary)}
+.scr-frame{position:relative;display:flex;overflow:hidden;background:var(--bg-page);color:var(--text);border:1px solid var(--border);border-radius:12px;font-family:var(--font-sans);box-shadow:0 1px 3px rgba(1,20,31,.08)}
+.scr-frame .tou-nav{flex:none}
+.scr-main{flex:1;min-width:0;overflow:auto;padding:32px;display:flex;flex-direction:column;gap:24px}
+.scr-phone{position:relative;display:flex;flex-direction:column;overflow:hidden;background:var(--bg-page);color:var(--text);border:1px solid var(--border);border-radius:28px;font-family:var(--font-sans)}
+.scr-appbar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;height:56px;padding:0 8px;background:var(--bg-surface);border-bottom:1px solid var(--border)}
+.scr-appbar img{height:22px;display:block}
+.scr-phone .scr-main{padding:16px;gap:16px}
+.scr-plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
+.scr-price{display:flex;align-items:baseline;gap:4px;margin:4px 0 12px}
+.scr-price b{font-size:30px;line-height:38px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.scr-price span{color:var(--text-secondary);font-size:13px;line-height:18px}
+.scr-feats{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.scr-feats li{display:flex;gap:8px;align-items:flex-start}
+.scr-feats li .tou-icon{color:var(--text-brand);margin-top:2px}
+.scr-feats li.off{color:var(--text-tertiary)}
+.scr-feats li.off .tou-icon{color:var(--text-tertiary)}
+.scr-usage{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.scr-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.scr-h2{margin:0;font-size:24px;line-height:32px;font-weight:600;letter-spacing:-.01em}
+.scr-toast{position:absolute;right:24px;bottom:24px;width:360px;z-index:60}
+.scr-cell-yes{display:inline-flex;align-items:center;gap:6px;color:var(--text)}
+.scr-cell-yes .tou-icon{color:var(--success)}
+.scr-cell-no{display:inline-flex;align-items:center;gap:6px;color:var(--text-tertiary)}
+`, CH_ICON = { Instagram: "image" }, ROW_MENU = [
+    { id: "abrir", label: "Abrir conversa", icon: "message-square" },
+    { id: "editar", label: "Editar contato", icon: "pencil" },
+    { id: "etiqueta", label: "Adicionar etiqueta", icon: "tag" },
+    { id: "transferir", label: "Transferir", icon: "arrow-up-down" },
+    { id: "excluir", label: "Excluir contato", icon: "trash", danger: !0, separator: !0 }
+  ];
+  function contactColumns() {
+    return [
+      {
+        key: "name",
+        header: "Contato",
+        sortable: !0,
+        mobile: "title",
+        render: (r) => /* @__PURE__ */ React.createElement("span", { className: "tou-cell-person" }, /* @__PURE__ */ React.createElement(Avatar, { name: r.name, size: "sm" }), /* @__PURE__ */ React.createElement("span", { className: "tou-cell-person__text" }, /* @__PURE__ */ React.createElement("span", { className: "tou-cell-person__name" }, r.name, r.isNew ? /* @__PURE__ */ React.createElement(React.Fragment, null, " ", /* @__PURE__ */ React.createElement(Badge, { tone: "primary" }, "Novo")) : null), /* @__PURE__ */ React.createElement("span", { className: "tou-cell-person__meta" }, /* @__PURE__ */ React.createElement(Icon, { name: CH_ICON[r.channel] || "message-circle", size: 12 }), r.channel)))
+      },
+      { key: "phone", header: "WhatsApp", mobile: "row", render: (r) => /* @__PURE__ */ React.createElement("span", { className: "tou-mono" }, r.phone) },
+      { key: "stage", header: "Etapa", sortable: !0, mobile: "row", render: (r) => r.stage === "Sem etapa" ? /* @__PURE__ */ React.createElement("span", { className: "tou-cell-muted" }, "Sem etapa") : /* @__PURE__ */ React.createElement(Badge, { tone: r.stageTone }, r.stage) },
+      { key: "status", header: "Atendimento", mobile: "row", render: (r) => /* @__PURE__ */ React.createElement(StatusDot, { tone: r.statusTone }, r.status) },
+      { key: "tags", header: "Etiquetas", mobile: "tags", render: (r) => r.tags.length ? /* @__PURE__ */ React.createElement("span", { className: "tou-cell-tags" }, r.tags.slice(0, 2).map(([t, tone]) => /* @__PURE__ */ React.createElement(Tag, { key: t, size: "sm", tone }, t)), r.tags.length > 2 ? /* @__PURE__ */ React.createElement(Tag, { size: "sm" }, "+", r.tags.length - 2) : null) : /* @__PURE__ */ React.createElement("span", { className: "tou-cell-muted" }, "Sem etiquetas") },
+      { key: "owner", header: "Responsável", sortable: !0, mobile: "hidden", render: (r) => /* @__PURE__ */ React.createElement("span", { style: { whiteSpace: "nowrap" } }, r.owner.split(" ")[0]) },
+      { key: "updated", header: "Atualizado", mobile: "hidden", render: (r) => /* @__PURE__ */ React.createElement("span", { className: "tou-cell-muted", style: { whiteSpace: "nowrap" } }, r.updated) }
+    ];
+  }
+  var FILTER_GROUPS = [
+    { id: "tags", label: "Etiquetas", options: TAGS.map(([t]) => ({ value: t, label: t })) },
+    { id: "stage", label: "Etapa", options: STAGES.map(([s]) => ({ value: s, label: s })) },
+    { id: "channel", label: "Canal", options: [{ value: "WhatsApp API", label: "WhatsApp API" }, { value: "WhatsApp Web", label: "WhatsApp Web" }, { value: "Instagram", label: "Instagram" }] },
+    { id: "owner", label: "Responsável", options: OWNERS.map((o) => ({ value: o, label: o })) }
+  ];
+  function applyFilters(rows, q, f, quick) {
+    let nq = strip(q.trim()), digits = q.replace(/\D/g, "");
+    return rows.filter((r) => {
+      var _a, _b, _c, _d;
+      return !(nq && !(strip(r.name).includes(nq) || strip(r.email).includes(nq) || digits.length >= 3 && r.phone.replace(/\D/g, "").includes(digits)) || (_a = f.tags) != null && _a.length && !r.tags.some(([t]) => f.tags.includes(t)) || (_b = f.stage) != null && _b.length && !f.stage.includes(r.stage) || (_c = f.channel) != null && _c.length && !f.channel.includes(r.channel) || (_d = f.owner) != null && _d.length && !f.owner.includes(r.owner) || quick.includes("atendimento") && r.status !== "Em atendimento" || quick.includes("pendente") && r.status !== "Pendente" || quick.includes("semwa") && r.status !== "Sem WhatsApp");
+    });
+  }
+  var EMPTY_FORM = { name: "", phone: "", doc: "", email: "", cep: "", value: "", stage: "Lead", tags: [], owner: null, birth: null, notes: "" };
+  function maskPhone(v) {
+    let d = v.replace(/\D/g, "").slice(0, 11);
+    return d.length <= 2 ? d ? `(${d}` : "" : d.length <= 6 ? `(${d.slice(0, 2)}) ${d.slice(2)}` : d.length <= 10 ? `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}` : `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+  }
+  function maskDoc(v) {
+    let d = v.replace(/\D/g, "").slice(0, 14);
+    return d.length <= 11 ? d.replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2") : d.replace(/^(\d{2})(\d)/, "$1.$2").replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3").replace(/\.(\d{3})(\d)/, ".$1/$2").replace(/(\d{4})(\d)/, "$1-$2");
+  }
+  function maskCep(v) {
+    let d = v.replace(/\D/g, "").slice(0, 8);
+    return d.length > 5 ? `${d.slice(0, 5)}-${d.slice(5)}` : d;
+  }
+  function validate(f) {
+    let e = {};
+    f.name.trim() ? f.name.trim().length < 2 && (e.name = "Use pelo menos 2 letras.") : e.name = "Digite o nome do contato.";
+    let pd = f.phone.replace(/\D/g, "");
+    pd ? pd.length < 10 ? e.phone = "Número incompleto: digite o DDD e o número (10 ou 11 dígitos)." : CONTACTS.some((c) => c.phone.replace(/\D/g, "").endsWith(pd)) && (e.phone = "Já existe um contato com este número.") : e.phone = "Digite o número do WhatsApp com DDD.";
+    let dd = f.doc.replace(/\D/g, "");
+    dd && dd.length !== 11 && dd.length !== 14 && (e.doc = "Use 11 dígitos para CPF ou 14 para CNPJ."), f.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email) && (e.email = "Digite um e-mail completo, como nome@empresa.com.");
+    let cd = f.cep.replace(/\D/g, "");
+    return cd && cd.length !== 8 && (e.cep = "O CEP tem 8 dígitos."), e;
+  }
+  var LABELS = { name: "Nome", phone: "Número do WhatsApp", doc: "CPF ou CNPJ", email: "E-mail", cep: "CEP" };
+  function NewContactModal({ open, onClose, onSaved, initial = EMPTY_FORM, submitted: submittedInit = !1, saving: savingInit = !1, contained = !0, fullScreen }) {
+    let [f, setF] = React.useState(initial), [submitted, setSubmitted] = React.useState(submittedInit), [saving, setSaving] = React.useState(savingInit), errs = submitted ? validate(f) : {}, n = Object.keys(errs).length, set = (k) => (e) => setF({ ...f, [k]: e != null && e.target ? e.target.value : e }), save = () => {
+      setSubmitted(!0);
+      let e = validate(f);
+      if (Object.keys(e).length) {
+        let first = Object.keys(e)[0];
+        setTimeout(() => {
+          var _a;
+          return (_a = document.querySelector(`[data-field="${first}"] input`)) == null ? void 0 : _a.focus();
+        }, 0);
+        return;
+      }
+      setSaving(!0), setTimeout(() => {
+        setSaving(!1);
+        let st = STAGES.find((s) => s[0] === f.stage) || STAGES[0];
+        onSaved == null || onSaved({ id: `n${Date.now()}`, name: f.name.trim(), phone: `+55 ${f.phone}`, email: f.email, channel: "WhatsApp API", stage: st[0], stageTone: st[1], tags: f.tags.map((t) => TAGS.find((x) => x[0] === t) || [t, "neutral"]), owner: f.owner && OWNERS.find((o) => o.toLowerCase().startsWith(f.owner)) || OWNERS[0], queue: "Recepção", value: +f.value.replace(/\D/g, "") / 100 || 0, updated: "agora", status: "Pendente", statusTone: "warning", isNew: !0 }), setF(EMPTY_FORM), setSubmitted(!1);
+      }, 900);
+    };
+    return /* @__PURE__ */ React.createElement(
+      Modal,
+      {
+        open,
+        onClose: saving ? void 0 : onClose,
+        contained,
+        fullScreen,
+        closeOnOverlay: !1,
+        size: "md",
+        title: "Novo contato",
+        subtitle: fullScreen ? void 0 : "O contato entra na etapa escolhida e já pode receber mensagens.",
+        footerStart: fullScreen ? void 0 : n ? /* @__PURE__ */ React.createElement("span", { style: { color: "var(--danger)", display: "inline-flex", gap: 6, alignItems: "center" }, role: "alert" }, /* @__PURE__ */ React.createElement(Icon, { name: "circle-alert", size: 14 }), n === 1 ? `1 campo precisa de atenção: ${LABELS[Object.keys(errs)[0]]}` : `${n} campos precisam de atenção`) : "* campos obrigatórios",
+        footer: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Button, { variant: "secondary", onClick: onClose, disabled: saving }, "Cancelar"), /* @__PURE__ */ React.createElement(Button, { iconStart: saving ? void 0 : "check", loading: saving, onClick: save }, saving ? "Adicionando…" : "Adicionar contato"))
+      },
+      /* @__PURE__ */ React.createElement("form", { className: "tou-form-grid", noValidate: !0, onSubmit: (e) => {
+        e.preventDefault(), save();
+      } }, /* @__PURE__ */ React.createElement("div", { className: "tou-span-2", "data-field": "name" }, /* @__PURE__ */ React.createElement(TextField, { label: "Nome", required: !0, autoComplete: "off", placeholder: "Ex.: Mariana Couto", value: f.name, onChange: set("name"), error: errs.name })), /* @__PURE__ */ React.createElement("div", { "data-field": "phone" }, /* @__PURE__ */ React.createElement(TextField, { label: "Número do WhatsApp", required: !0, inputMode: "tel", placeholder: "(13) 99999-9999", addonStart: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", { className: "tou-mono" }, "BR +55"), /* @__PURE__ */ React.createElement(Icon, { name: "chevron-down", size: 14 })), value: f.phone, onChange: (e) => setF({ ...f, phone: maskPhone(e.target.value) }), error: errs.phone, help: errs.phone ? void 0 : "Com DDD. Usamos para iniciar conversas." })), /* @__PURE__ */ React.createElement("div", { "data-field": "doc" }, /* @__PURE__ */ React.createElement(TextField, { label: "CPF ou CNPJ", optional: !0, inputMode: "numeric", placeholder: "000.000.000-00", value: f.doc, onChange: (e) => setF({ ...f, doc: maskDoc(e.target.value) }), error: errs.doc })), /* @__PURE__ */ React.createElement("div", { "data-field": "email" }, /* @__PURE__ */ React.createElement(TextField, { label: "E-mail", optional: !0, type: "email", icon: "mail", placeholder: "nome@empresa.com", value: f.email, onChange: set("email"), error: errs.email })), /* @__PURE__ */ React.createElement("div", { "data-field": "cep" }, /* @__PURE__ */ React.createElement(TextField, { label: "CEP", optional: !0, inputMode: "numeric", placeholder: "00000-000", value: f.cep, onChange: (e) => setF({ ...f, cep: maskCep(e.target.value) }), error: errs.cep })), /* @__PURE__ */ React.createElement(Select, { label: "Etapa do funil", options: STAGES.map(([s]) => ({ value: s, label: s })), value: f.stage, onChange: set("stage") }), /* @__PURE__ */ React.createElement(Combobox, { label: "Responsável", optional: !0, placeholder: "Buscar atendente", options: OWNERS.map((o) => ({ value: o.split(" ")[0].toLowerCase(), label: o, meta: o === "Diego Torres" ? "Offline" : "Online" })), value: f.owner, onChange: (v) => setF({ ...f, owner: v }) }), /* @__PURE__ */ React.createElement(MultiSelect, { className: "tou-span-2", label: "Etiquetas", optional: !0, placeholder: "Adicionar etiquetas", options: TAGS.map(([t]) => ({ value: t, label: t })), value: f.tags, onChange: set("tags") }), /* @__PURE__ */ React.createElement(TextField, { label: "Valor do negócio", optional: !0, prefix: "R$", inputMode: "decimal", placeholder: "0,00", value: f.value, onChange: set("value") }), /* @__PURE__ */ React.createElement(DateField, { label: "Data de nascimento", optional: !0, today: TODAY2, value: f.birth, onChange: set("birth"), help: " " }))
+    );
+  }
+  function ContactsScreen(p) {
+    let [rows, setRows] = React.useState(p.startToast ? [{ ...CONTACTS[3], id: "n1", name: "Lucas Ferraz", phone: "+55 (13) 99700-4410", email: "lucas.ferraz@email.com", stage: "Lead", stageTone: "primary", tags: [TAGS[3]], owner: OWNERS[0], status: "Pendente", statusTone: "warning", updated: "agora", isNew: !0 }, ...CONTACTS] : CONTACTS), [q, setQ] = React.useState(p.startQuery || ""), [filters, setFilters] = React.useState(p.startFilters || {}), [quick, setQuick] = React.useState(p.startQuick || []), [sort, setSort] = React.useState({ key: "name", dir: "asc" }), [sel, setSel] = React.useState(() => {
+      if (!p.startSelectIdx) return p.startSelected || [];
+      let base = applyFilters(CONTACTS, p.startQuery || "", p.startFilters || {}, p.startQuick || []).sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
+      return p.startSelectIdx.map((i) => {
+        var _a;
+        return (_a = base[i]) == null ? void 0 : _a.id;
+      }).filter(Boolean);
+    }), [page, setPage] = React.useState(p.startPage || 1), size = p.mobile ? 4 : 10, [modal, setModal] = React.useState(!!p.startModal), [toast, setToast] = React.useState(p.startToast ? { title: "Contato adicionado", description: "Lucas Ferraz entrou na etapa Lead." } : null), [confirm, setConfirm] = React.useState(null), [drawer, setDrawer] = React.useState(!!p.startDrawer);
+    React.useEffect(() => setPage(1), [q, filters, quick]);
+    let filtered = applyFilters(rows, q, filters, quick), pageRows = [...filtered].sort((a, b) => {
+      if (a.isNew !== b.isNew) return a.isNew ? -1 : 1;
+      if (!sort) return 0;
+      let r = String(a[sort.key]).localeCompare(String(b[sort.key]), "pt-BR");
+      return sort.dir === "asc" ? r : -r;
+    }).slice((page - 1) * size, page * size), count = (pred) => rows.filter(pred).length, quickF = [
+      { id: "atendimento", label: "Em atendimento", count: count((c) => c.status === "Em atendimento") },
+      { id: "pendente", label: "Pendentes", count: count((c) => c.status === "Pendente") },
+      { id: "semwa", label: "Sem WhatsApp", count: count((c) => c.status === "Sem WhatsApp") }
+    ], hasFilters = !!q || quick.length > 0 || Object.values(filters).some((v) => v.length), clearAll = () => {
+      setQ(""), setFilters({}), setQuick([]);
+    }, onRow = (id, r) => {
+      id === "excluir" && setConfirm({ ids: [r.id], label: r.name });
+    }, cols = contactColumns().filter((c) => !p.mobile || c.mobile !== "hidden"), empty = hasFilters ? /* @__PURE__ */ React.createElement(EmptyState, { compact: !0, icon: "search-x", tone: "neutral", title: "Nenhum contato com esses filtros", description: q ? `Nada corresponde a “${q}”. Confira a grafia ou remova algum filtro.` : "Remova algum filtro para ver mais contatos.", actions: /* @__PURE__ */ React.createElement(Button, { variant: "secondary", size: "sm", iconStart: "funnel-x", onClick: clearAll }, "Limpar filtros") }) : /* @__PURE__ */ React.createElement(EmptyState, { icon: "user-plus", title: "Você ainda não tem contatos", description: "Importe uma planilha ou adicione o primeiro contato.", actions: /* @__PURE__ */ React.createElement(Button, { iconStart: "plus", onClick: () => setModal(!0) }, "Adicionar contato") }), importMenu = /* @__PURE__ */ React.createElement(
+      Menu,
+      {
+        align: "end",
+        onSelect: () => {
+        },
+        items: [{ id: "imp", label: "Importar planilha", icon: "upload" }, { id: "csv", label: "Exportar CSV", icon: "download", separator: !0 }, { id: "xlsx", label: "Exportar .xlsx", icon: "download" }],
+        trigger: p.mobile ? /* @__PURE__ */ React.createElement(IconButton, { icon: "ellipsis-vertical", label: "Importar ou exportar", variant: "default" }) : /* @__PURE__ */ React.createElement(Button, { variant: "secondary", iconStart: "arrow-up-down", iconEnd: "chevron-down" }, "Importar / exportar")
+      }
+    ), content = /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(
+      PageHeader,
+      {
+        title: "Contatos",
+        count: rows.length,
+        subtitle: "Todos que já falaram com a clínica por WhatsApp ou Instagram.",
+        actions: /* @__PURE__ */ React.createElement(React.Fragment, null, importMenu, p.mobile ? /* @__PURE__ */ React.createElement(IconButton, { icon: "user-plus", label: "Adicionar contato", variant: "tonal", onClick: () => setModal(!0) }) : /* @__PURE__ */ React.createElement(Button, { iconStart: "plus", onClick: () => setModal(!0) }, "Adicionar contato"))
+      }
+    ), /* @__PURE__ */ React.createElement(FilterBar, { query: q, onQueryChange: setQ, searchLabel: "Buscar contatos", searchPlaceholder: p.mobile ? "Buscar contatos" : "Buscar por nome, telefone ou e-mail", groups: FILTER_GROUPS, value: filters, onChange: setFilters, quickFilters: quickF, quickValue: quick, onQuickChange: setQuick }), /* @__PURE__ */ React.createElement(
+      DataTable,
+      {
+        caption: "Contatos",
+        columns: cols,
+        rows: pageRows,
+        rowKey: (r) => r.id,
+        density: "comfortable",
+        layout: p.mobile ? "cards" : "table",
+        selectable: !0,
+        selected: sel,
+        onSelectionChange: setSel,
+        bulkActions: p.mobile ? /* @__PURE__ */ React.createElement(Button, { variant: "secondary", size: "sm", iconStart: "tag" }, "Etiquetar") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Button, { variant: "secondary", size: "sm", iconStart: "tag" }, "Etiquetar"), /* @__PURE__ */ React.createElement(Button, { variant: "secondary", size: "sm", iconStart: "send" }, "Enviar mensagem"), /* @__PURE__ */ React.createElement(Button, { variant: "secondary", size: "sm", iconStart: "arrow-up-down" }, "Transferir"), /* @__PURE__ */ React.createElement(Button, { variant: "tertiary", size: "sm", iconStart: "trash", onClick: () => setConfirm({ ids: sel, label: `${sel.length} contatos` }) }, "Excluir")),
+        sort,
+        onSortChange: setSort,
+        rowActions: (r) => /* @__PURE__ */ React.createElement(Menu, { align: "end", items: ROW_MENU, onSelect: (id) => onRow(id, r), trigger: /* @__PURE__ */ React.createElement(IconButton, { icon: "ellipsis-vertical", label: `Mais ações para ${r.name}`, size: "sm" }) }),
+        empty,
+        pagination: { page, pageSize: size, total: filtered.length, onPageChange: setPage, itemLabel: "contatos" }
+      }
+    )), overlays = /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(
+      NewContactModal,
+      {
+        open: modal,
+        onClose: () => setModal(!1),
+        initial: p.modalInitial,
+        submitted: p.modalSubmitted,
+        saving: p.modalSaving,
+        fullScreen: p.mobile,
+        onSaved: (c) => {
+          setRows([c, ...rows]), setModal(!1), setToast({ title: "Contato adicionado", description: `${c.name} entrou na etapa ${c.stage}.` });
+        }
+      }
+    ), /* @__PURE__ */ React.createElement(
+      ConfirmDialog,
+      {
+        contained: !0,
+        open: !!confirm,
+        onClose: () => setConfirm(null),
+        title: `Excluir ${(confirm == null ? void 0 : confirm.ids.length) === 1 ? confirm.label : confirm == null ? void 0 : confirm.label}?`,
+        description: "As conversas e o histórico também serão excluídos. Não dá para desfazer.",
+        confirmLabel: (confirm == null ? void 0 : confirm.ids.length) === 1 ? "Excluir contato" : `Excluir ${confirm == null ? void 0 : confirm.ids.length} contatos`,
+        onConfirm: () => {
+          let ids = confirm.ids;
+          setRows(rows.filter((r) => !ids.includes(r.id))), setSel(sel.filter((s) => !ids.includes(s))), setConfirm(null), setToast({ title: ids.length === 1 ? "Contato excluído" : `${ids.length} contatos excluídos`, tone: "success" });
+        }
+      }
+    ), toast ? /* @__PURE__ */ React.createElement("div", { className: "scr-toast", style: p.mobile ? { left: 16, right: 16, bottom: 16, width: "auto" } : void 0 }, /* @__PURE__ */ React.createElement(Toast, { tone: toast.tone || "success", title: toast.title, description: toast.description, onClose: () => setToast(null), duration: p.startToast ? 0 : 5e3 })) : null);
+    return p.mobile ? /* @__PURE__ */ React.createElement("div", { className: "scr-phone", "data-theme": p.theme, style: { width: p.width || 375, height: p.height || 812 }, role: "region", "aria-label": p.label }, /* @__PURE__ */ React.createElement("div", { className: "scr-appbar" }, /* @__PURE__ */ React.createElement(IconButton, { icon: "panel-left-open", label: "Abrir menu", onClick: () => setDrawer(!0) }), /* @__PURE__ */ React.createElement("img", { src: p.theme === "dark" ? LOGO_W : LOGO, alt: "TOU" }), /* @__PURE__ */ React.createElement(IconButton, { icon: "bell", label: "Notificações", badge: 12 })), /* @__PURE__ */ React.createElement("main", { className: "scr-main" }, content), /* @__PURE__ */ React.createElement(Drawer, { contained: !0, bare: !0, side: "left", open: drawer, onClose: () => setDrawer(!1), title: "Menu principal" }, /* @__PURE__ */ React.createElement(Sidebar, { groups: NAV, current: "lista", logoSrc: p.theme === "dark" ? LOGO_W : LOGO, user: USER, onClose: () => setDrawer(!1), footerActions: /* @__PURE__ */ React.createElement(NavFooter, null) })), overlays) : /* @__PURE__ */ React.createElement(AppFrame, { theme: p.theme, current: "lista", label: p.label, width: p.width, height: p.height }, content, overlays);
+  }
+
+  // previews/_screens.tsx
+  function mountScreen(node) {
+    let style = document.createElement("style");
+    style.textContent = DOC_CSS + SCREEN_CSS + "body{padding:32px 40px 48px;background:var(--bg-page)}", document.head.appendChild(style), document.documentElement.setAttribute("data-theme", "light"), ReactDOM.createRoot(document.getElementById("root")).render(node);
+  }
+  function Label({ children, note }) {
+    return /* @__PURE__ */ React.createElement("p", { className: "scr-label" }, children, note ? /* @__PURE__ */ React.createElement("span", null, "· ", note) : null);
+  }
+
+  // previews/TelaContatos.tsx
+  mountScreen(
+    /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Label, { note: "filtros e atalhos ativos em chips; 2 linhas selecionadas mostram as ações em massa. A tela é navegável: filtre, ordene, pagine, abra o menu ⋮, a lupa do menu (filtra as telas) e clique em “Adicionar contato”." }, "Lista de contatos · claro"), /* @__PURE__ */ React.createElement(ContactsScreen, { theme: "light", label: "Lista de contatos, tema claro", startFilters: { stage: ["Lead", "Lead quente", "Agendado"] }, startSelectIdx: [1, 3] }), /* @__PURE__ */ React.createElement(Label, { note: "sem filtros, página 2" }, "Lista de contatos · escuro"), /* @__PURE__ */ React.createElement(ContactsScreen, { theme: "dark", label: "Lista de contatos, tema escuro", startPage: 2 }), /* @__PURE__ */ React.createElement(Label, { note: "a busca não encontrou nada: estado vazio compacto dentro da tabela, com a ação de limpar" }, "Estado vazio · claro"), /* @__PURE__ */ React.createElement(ContactsScreen, { theme: "light", label: "Lista de contatos sem resultados", startQuery: "Fernanda Albuquerque", startFilters: { tags: ["Implante"] }, height: 560 }))
+  );
+})();
+
+</script>
+</body>
+</html>

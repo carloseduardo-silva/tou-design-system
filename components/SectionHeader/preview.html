@@ -1,0 +1,67 @@
+<!-- @dsCard group="Marketing" height=600 subtitle="Eyebrow, título e subtítulo" -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SectionHeader</title>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(() => {
+  // src/react-shim.ts
+  var React = window.React, ReactDOM = window.ReactDOM;
+
+  // previews/_doc.tsx
+  var T = window.TOU, DOC_CSS = `
+html,body{margin:0;background:var(--bg-page);}
+body{font-family:var(--font-sans);color:var(--text);font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased;}
+.doc-theme{background:var(--bg-page);color:var(--text);padding:20px 24px 28px;}
+.doc-theme+.doc-theme{border-top:1px solid var(--border);}
+.doc-tl{display:flex;align-items:center;gap:8px;font-size:11px;line-height:16px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin:0 0 16px;}
+.doc-tl::after{content:"";flex:1;height:1px;background:var(--border);}
+.doc-h{font-size:13px;line-height:18px;font-weight:600;color:var(--text-secondary);margin:20px 0 10px;}
+.doc-h:first-of-type{margin-top:0;}
+.doc-matrix{display:grid;gap:12px 16px;align-items:center;overflow-x:auto;padding:4px;margin:-4px;}
+.doc-col{font-size:12px;line-height:16px;color:var(--text-tertiary);font-weight:500;}
+.doc-rl{font-size:12px;line-height:16px;color:var(--text-secondary);font-weight:500;}
+.doc-flex{display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+.doc-flex-top{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;}
+.doc-grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px;align-items:start;}
+.doc-grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 24px;align-items:start;}
+.doc-grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 20px;align-items:start;}
+@media (max-width:720px){.doc-grid2,.doc-grid3,.doc-grid4{grid-template-columns:1fr;}}
+.doc-cap{display:block;font-size:12px;line-height:16px;color:var(--text-tertiary);margin-top:6px;}
+.doc-box{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;}
+.doc-pad{padding-bottom:var(--doc-pad,0);}
+.doc-note{font-size:12px;line-height:16px;color:var(--text-secondary);margin-top:12px;display:flex;gap:6px;align-items:flex-start;}
+`;
+  var TODAY = new Date(2026, 9, 6);
+
+  // previews/_mkt.tsx
+  var MKT_CSS = DOC_CSS + `
+body{padding:24px;background:var(--bg-page)}
+.mk-l{font-size:11px;line-height:16px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin:28px 0 10px}
+.mk-l:first-child{margin-top:0}
+.mk-frame{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--bg-surface)}
+.mk-phone{width:375px;border:1px solid var(--border);border-radius:24px;overflow:hidden;background:var(--bg-surface);flex:none}
+.mk-row{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
+`;
+  function mountMkt(node) {
+    let s = document.createElement("style");
+    s.textContent = MKT_CSS, document.head.appendChild(s), document.documentElement.setAttribute("data-theme", "light"), ReactDOM.createRoot(document.getElementById("root")).render(node);
+  }
+  var L = ({ children }) => /* @__PURE__ */ React.createElement("p", { className: "mk-l" }, children);
+  function Site({ children, mobile, h, pad }) {
+    return /* @__PURE__ */ React.createElement("div", { className: mobile ? "mk-phone" : "mk-frame", style: { height: h, position: "relative" } }, /* @__PURE__ */ React.createElement("div", { className: "tou-site", "data-theme": "light", style: { position: "relative", height: h ? "100%" : void 0, overflow: h ? "hidden" : void 0, padding: pad ? mobile ? "32px 0" : "48px 0" : void 0 } }, children));
+  }
+
+  // previews/SectionHeader.tsx
+  var { SectionHeader, Accent } = T;
+  mountMkt(/* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(L, null, "Centralizado (padrão) · um tamanho de título para todas as seções"), /* @__PURE__ */ React.createElement(Site, { pad: !0 }, /* @__PURE__ */ React.createElement(SectionHeader, { eyebrow: "Recursos", title: /* @__PURE__ */ React.createElement(React.Fragment, null, "Visão completa da sua ", /* @__PURE__ */ React.createElement(Accent, null, "clínica"), "."), subtitle: "Do primeiro contato ao fechamento: automações, dados e relacionamento trabalhando juntos." })), /* @__PURE__ */ React.createElement(L, null, "Alinhado à esquerda, sobre papel e sobre marinho"), /* @__PURE__ */ React.createElement("div", { className: "mk-row" }, /* @__PURE__ */ React.createElement("div", { style: { flex: 1, minWidth: 320 } }, /* @__PURE__ */ React.createElement(Site, { pad: !0 }, /* @__PURE__ */ React.createElement("div", { className: "tou-section--paper", style: { padding: 32 } }, /* @__PURE__ */ React.createElement(SectionHeader, { align: "start", eyebrow: "Integrações", title: "Conecte o que sua equipe já usa", subtitle: "Agenda, prontuário e planilhas." })))), /* @__PURE__ */ React.createElement("div", { style: { flex: 1, minWidth: 320 } }, /* @__PURE__ */ React.createElement(Site, { pad: !0 }, /* @__PURE__ */ React.createElement("div", { "data-theme": "navy", style: { background: "var(--bg-page)", padding: 32 } }, /* @__PURE__ */ React.createElement(SectionHeader, { align: "start", eyebrow: "Para redes", title: /* @__PURE__ */ React.createElement(React.Fragment, null, "Várias unidades, uma ", /* @__PURE__ */ React.createElement(Accent, null, "operação")), subtitle: "Cada unidade com seu número e sua fila." })))))));
+})();
+
+</script>
+</body>
+</html>

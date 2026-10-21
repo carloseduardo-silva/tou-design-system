@@ -1,0 +1,62 @@
+<!-- @dsCard group="Formulário" height=1200 subtitle="Input e textarea com rótulo, ajuda e erro" -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TextField</title>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(() => {
+  // src/react-shim.ts
+  var React = window.React, ReactDOM = window.ReactDOM;
+
+  // previews/_doc.tsx
+  var T = window.TOU, DOC_CSS = `
+html,body{margin:0;background:var(--bg-page);}
+body{font-family:var(--font-sans);color:var(--text);font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased;}
+.doc-theme{background:var(--bg-page);color:var(--text);padding:20px 24px 28px;}
+.doc-theme+.doc-theme{border-top:1px solid var(--border);}
+.doc-tl{display:flex;align-items:center;gap:8px;font-size:11px;line-height:16px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin:0 0 16px;}
+.doc-tl::after{content:"";flex:1;height:1px;background:var(--border);}
+.doc-h{font-size:13px;line-height:18px;font-weight:600;color:var(--text-secondary);margin:20px 0 10px;}
+.doc-h:first-of-type{margin-top:0;}
+.doc-matrix{display:grid;gap:12px 16px;align-items:center;overflow-x:auto;padding:4px;margin:-4px;}
+.doc-col{font-size:12px;line-height:16px;color:var(--text-tertiary);font-weight:500;}
+.doc-rl{font-size:12px;line-height:16px;color:var(--text-secondary);font-weight:500;}
+.doc-flex{display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+.doc-flex-top{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;}
+.doc-grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px;align-items:start;}
+.doc-grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 24px;align-items:start;}
+.doc-grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 20px;align-items:start;}
+@media (max-width:720px){.doc-grid2,.doc-grid3,.doc-grid4{grid-template-columns:1fr;}}
+.doc-cap{display:block;font-size:12px;line-height:16px;color:var(--text-tertiary);margin-top:6px;}
+.doc-box{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;}
+.doc-pad{padding-bottom:var(--doc-pad,0);}
+.doc-note{font-size:12px;line-height:16px;color:var(--text-secondary);margin-top:12px;display:flex;gap:6px;align-items:flex-start;}
+`;
+  function Themes({ children, only }) {
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, (only ? [only] : ["light", "dark"]).map((t) => /* @__PURE__ */ React.createElement("section", { key: t, className: "doc-theme", "data-theme": t, "aria-label": t === "light" ? "Tema claro" : "Tema escuro" }, /* @__PURE__ */ React.createElement("p", { className: "doc-tl" }, t === "light" ? "Claro" : "Escuro"), children(t))));
+  }
+  function H({ children }) {
+    return /* @__PURE__ */ React.createElement("p", { className: "doc-h" }, children);
+  }
+  function mount(node) {
+    let el = document.getElementById("root"), style = document.createElement("style");
+    style.textContent = DOC_CSS, document.head.appendChild(style), ReactDOM.createRoot(el).render(node);
+  }
+  var TODAY = new Date(2026, 9, 6);
+
+  // previews/TextField.tsx
+  var { TextField, Textarea, Icon } = T, noop = () => {
+  };
+  mount(
+    /* @__PURE__ */ React.createElement(Themes, null, () => /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(H, null, "Estados"), /* @__PURE__ */ React.createElement("div", { className: "doc-grid4" }, /* @__PURE__ */ React.createElement(TextField, { label: "Nome", required: !0, placeholder: "Ex.: Mariana Couto", help: "Como aparece na lista e no chat." }), /* @__PURE__ */ React.createElement(TextField, { label: "Nome", required: !0, value: "Mariana Couto", onChange: noop, help: "Preenchido" }), /* @__PURE__ */ React.createElement(TextField, { label: "Nome", required: !0, value: "Mariana Couto", onChange: noop, controlClassName: "is-hover", help: "Hover" }), /* @__PURE__ */ React.createElement(TextField, { label: "Nome", required: !0, value: "Mariana Cou", onChange: noop, controlClassName: "is-focus", help: "Foco: borda e anel na primária" }), /* @__PURE__ */ React.createElement(TextField, { label: "E-mail", value: "mariana.couto@", onChange: noop, error: "Digite um e-mail completo, como nome@empresa.com." }), /* @__PURE__ */ React.createElement(TextField, { label: "E-mail", value: "mariana.couto@", onChange: noop, error: "Digite um e-mail completo, como nome@empresa.com.", controlClassName: "is-focus" }), /* @__PURE__ */ React.createElement(TextField, { label: "ID do contato", value: "#1118909", onChange: noop, disabled: !0, help: "Gerado automaticamente." }), /* @__PURE__ */ React.createElement(TextField, { label: "Origem", value: "Formulário do site", onChange: noop, readOnly: !0, help: "Somente leitura." })), /* @__PURE__ */ React.createElement(H, null, "Com ícone, prefixo, seletor de país, limpar e contador"), /* @__PURE__ */ React.createElement("div", { className: "doc-grid3" }, /* @__PURE__ */ React.createElement(TextField, { label: "Número do WhatsApp", required: !0, addonStart: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", { className: "tou-mono" }, "BR +55"), /* @__PURE__ */ React.createElement(Icon, { name: "chevron-down", size: 14 })), placeholder: "(13) 99999-9999", inputMode: "tel" }), /* @__PURE__ */ React.createElement(TextField, { label: "Valor do negócio", optional: !0, prefix: "R$", placeholder: "0,00", inputMode: "decimal" }), /* @__PURE__ */ React.createElement(TextField, { label: "E-mail", optional: !0, icon: "mail", type: "email", placeholder: "nome@empresa.com" }), /* @__PURE__ */ React.createElement(TextField, { label: "Buscar contato", icon: "search", value: "Mariana", onChange: noop, onClear: noop }), /* @__PURE__ */ React.createElement(TextField, { label: "Nome do template", value: "boas_vindas_clinica", onChange: noop, maxLength: 40, help: "Só letras minúsculas, números e _." }), /* @__PURE__ */ React.createElement(TextField, { label: "Prazo de retorno", suffix: "dias", value: "7", onChange: noop, inputMode: "numeric" })), /* @__PURE__ */ React.createElement(H, null, "Tamanho pequeno (32px, filtros e tabelas)"), /* @__PURE__ */ React.createElement("div", { className: "doc-grid3" }, /* @__PURE__ */ React.createElement(TextField, { label: "Telefone", size: "sm", icon: "phone", placeholder: "(13) 99999-9999" }), /* @__PURE__ */ React.createElement(TextField, { label: "Telefone", size: "sm", icon: "phone", value: "(13) 9970", onChange: noop, error: "Número incompleto." })), /* @__PURE__ */ React.createElement(H, null, "Textarea"), /* @__PURE__ */ React.createElement("div", { className: "doc-grid3" }, /* @__PURE__ */ React.createElement(Textarea, { label: "Observações", optional: !0, placeholder: "Ex.: prefere contato à tarde.", help: "Visível para toda a equipe." }), /* @__PURE__ */ React.createElement(Textarea, { label: "Mensagem de boas-vindas", required: !0, value: "Olá! Que bom ter você por aqui. Em que podemos ajudar hoje?", onChange: noop, maxLength: 60, error: "Use no máximo 60 caracteres." }), /* @__PURE__ */ React.createElement(Textarea, { label: "Motivo da perda", disabled: !0, value: "Escolheu outro fornecedor.", onChange: noop }))))
+  );
+})();
+
+</script>
+</body>
+</html>

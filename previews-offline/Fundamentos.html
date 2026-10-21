@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fundamentos</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { background: var(--bg-page); }
+  body { margin: 0; background: var(--bg-page); color: var(--text); font-family: var(--font-sans); font-size: 14px; line-height: 20px; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-24); }
+  @media (max-width: 599px) { .wrap { padding: var(--space-6) var(--space-4) var(--space-16); } }
+  h1, h2, h3, h4, p { margin: 0; }
+  .overline { text-transform: uppercase; }
+  .mkt-eyebrow { text-transform: uppercase; }
+  .muted { color: var(--text-secondary); }
+  .meta { color: var(--text-tertiary); }
+  .mono, code { font-family: var(--font-mono); font-size: 13px; line-height: 20px; font-variant-numeric: tabular-nums; }
+  code { color: var(--text); }
+
+  /* ---- topo ---- */
+  .top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-6); flex-wrap: wrap; }
+  .brandline { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-6); }
+  .brandline img { height: 24px; width: auto; display: block; }
+  .logo-white { display: none !important; }
+  .brandline .overline { color: var(--text-secondary); }
+  .lede { max-width: 640px; margin-top: var(--space-2); }
+
+  .seg { display: inline-flex; padding: var(--space-0\.5); gap: var(--space-0\.5); background: var(--bg-sunken); border: 1px solid var(--border); border-radius: var(--radius-md); }
+  .seg button { appearance: none; border: 0; background: transparent; color: var(--text-secondary); font: inherit; font-weight: 500; padding: var(--space-1\.5) var(--space-3); min-height: 32px; border-radius: var(--radius-sm); cursor: pointer; display: inline-flex; align-items: center; gap: var(--space-1\.5); transition: background-color var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard); }
+  .seg button:hover { background: var(--bg-hover); color: var(--text); }
+  .seg button[aria-pressed="true"] { background: var(--bg-surface); color: var(--text); box-shadow: var(--shadow-xs); }
+  [data-theme="dark"] .seg button[aria-pressed="true"] { box-shadow: inset 0 0 0 1px var(--border); }
+  button:focus-visible, a:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  .toc { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--border); }
+  .toc a { color: var(--link); text-decoration: none; font-weight: 500; padding: var(--space-0\.5) 0; border-radius: var(--radius-2xs); }
+  .toc a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  /* ---- seções ---- */
+  section { margin-top: var(--space-16); scroll-margin-top: var(--space-6); }
+  .sh { margin-bottom: var(--space-6); max-width: 720px; }
+  .sh .overline { color: var(--text-brand); display: block; margin-bottom: var(--space-2); }
+  .sh p { margin-top: var(--space-2); }
+  .sub { margin: var(--space-8) 0 var(--space-3); display: flex; align-items: baseline; gap: var(--space-3); flex-wrap: wrap; }
+  .sub:first-of-type { margin-top: 0; }
+  .panel { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--space-6); }
+  [data-theme="light"] .panel, :root:not([data-theme]) .panel { box-shadow: var(--shadow-xs); }
+  @media (max-width: 599px) { .panel { padding: var(--space-4); } }
+
+  /* ---- swatches ---- */
+  .scale { display: grid; grid-template-columns: repeat(11, minmax(0, 1fr)); gap: var(--space-2); }
+  .scale.few { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3); }
+  @media (max-width: 900px) { .scale { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+  @media (max-width: 599px) { .scale { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .sw .chip { height: 64px; border-radius: var(--radius-md); box-shadow: inset 0 0 0 1px var(--border); position: relative; }
+  .scale.few .sw .chip { height: 72px; }
+  .sw .nm { display: block; margin-top: var(--space-2); }
+  .sw .hx { display: block; color: var(--text-tertiary); }
+  .sw .use { display: block; margin-top: var(--space-1); color: var(--text-secondary); }
+  .sw.key .chip::after { content: ""; position: absolute; left: var(--space-2); top: var(--space-2); width: 8px; height: 8px; border-radius: 9999px; background: #FFFFFF; box-shadow: 0 0 0 2px var(--ink-900); }
+  .legend { display: inline-flex; align-items: center; gap: var(--space-1\.5); color: var(--text-secondary); }
+  .legend i { width: 8px; height: 8px; border-radius: 9999px; background: #FFFFFF; box-shadow: 0 0 0 2px var(--ink-900); display: inline-block; }
+
+  .gradient { height: 72px; border-radius: var(--radius-lg); background: linear-gradient(110deg, var(--brand-blue) 0%, var(--brand-cyan) 55%, var(--brand-teal) 100%); margin-top: var(--space-3); }
+  .rule-list { margin: var(--space-3) 0 0; padding: 0; list-style: none; display: grid; gap: var(--space-2); }
+  .rule-list li { display: flex; gap: var(--space-2); align-items: flex-start; }
+  .rule-list svg { flex: none; margin-top: 2px; }
+  .ok-ic { color: var(--success); }
+  .no-ic { color: var(--danger); }
+
+  /* ---- estados ---- */
+  .states { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+  @media (max-width: 767px) { .states { grid-template-columns: 1fr; } }
+  .state-theme { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--space-5); color: var(--text); }
+  .state-theme > .overline { color: var(--text-secondary); display: block; margin-bottom: var(--space-3); }
+  .state-row { display: grid; grid-template-columns: 72px repeat(3, minmax(0, 1fr)); gap: var(--space-3); align-items: center; padding: var(--space-2) 0; border-top: 1px solid var(--border); }
+  .state-row:first-of-type { border-top: 0; }
+  .state-row .lbl { color: var(--text-secondary); }
+  .pill { display: inline-flex; align-items: center; gap: var(--space-1); padding: 2px var(--space-2) 2px var(--space-1\.5); border-radius: var(--radius-pill); white-space: nowrap; }
+  .pill svg { flex: none; }
+  .pill-text { background: transparent; padding-left: 0; }
+  .hexs { display: block; color: var(--text-tertiary); margin-top: var(--space-1); }
+  @media (max-width: 599px) { .state-row { grid-template-columns: 1fr 1fr; } .state-row .lbl { grid-column: 1 / -1; } }
+
+  /* ---- tabela claro × escuro ---- */
+  .duo { width: 100%; border-collapse: separate; border-spacing: 0; }
+  .duo th { text-align: left; color: var(--text-secondary); padding: 0 var(--space-3) var(--space-2); border-bottom: 1px solid var(--border); }
+  .duo td { padding: var(--space-3); border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .duo tr:last-child td { border-bottom: 0; }
+  .duo td:first-child, .duo th:first-child { padding-left: 0; }
+  .duo .tk { white-space: nowrap; }
+  .duo .tk span { display: block; }
+  .duo .cellwrap { width: 26%; min-width: 200px; }
+  .th-cell { display: flex; align-items: center; gap: var(--space-3); background: var(--bg-page); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--space-2); }
+  .th-cell .s { width: 40px; height: 32px; border-radius: var(--radius-sm); flex: none; display: grid; place-items: center; font-weight: 600; font-size: 16px; line-height: 24px; }
+  .th-cell .v { min-width: 0; }
+  .th-cell .v span { display: block; }
+  .th-cell .v .meta { color: var(--text-tertiary); }
+  .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .scroll-x > table.duo { min-width: 720px; }
+
+  /* ---- contraste ---- */
+  .ratio { display: flex; align-items: center; gap: var(--space-3); }
+  .sample { width: 88px; height: 40px; border-radius: var(--radius-md); display: grid; place-items: center; font-weight: 500; flex: none; box-shadow: inset 0 0 0 1px var(--border); }
+  .sample.mark { position: relative; }
+  .sample.mark::after { content: ""; position: absolute; inset: 9px 20px; border-radius: var(--radius-sm); border: 2px solid var(--probe-fg); }
+  .num { font-family: var(--font-mono); font-size: 13px; line-height: 20px; font-variant-numeric: tabular-nums; display: block; }
+  .verdict { display: inline-flex; align-items: center; gap: var(--space-1); }
+  .verdict.pass { color: var(--success); }
+  .verdict.fail { color: var(--danger); }
+  .verdict.ban { color: var(--danger); }
+  .na { color: var(--text-tertiary); }
+
+  .adjust { margin-top: var(--space-8); border: 1px solid var(--border); background: var(--bg-surface); border-radius: var(--radius-lg); padding: var(--space-6); }
+  .adjust .head { display: flex; gap: var(--space-3); align-items: flex-start; }
+  .adjust .head svg { color: var(--success); flex: none; margin-top: 4px; }
+  .adjust p { max-width: 760px; }
+  .opts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); margin-top: var(--space-5); }
+  @media (max-width: 900px) { .opts { grid-template-columns: 1fr; } }
+  .opt { border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); background: var(--bg-surface); color: var(--text); }
+  .opt .cap { padding: var(--space-3) var(--space-4); display: flex; justify-content: space-between; gap: var(--space-2); align-items: center; border-bottom: 1px solid var(--border); }
+  .opt .rows { background: var(--bg-surface); }
+  .opt .row { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-top: 1px solid var(--border); }
+  .opt .row:first-child { border-top: 0; }
+  .opt .row.is-hover { background: var(--bg-hover); }
+  .opt .av { width: 32px; height: 32px; border-radius: 9999px; background: var(--primary-soft); color: var(--text-brand); display: grid; place-items: center; font-size: 12px; line-height: 16px; font-weight: 600; flex: none; }
+  .opt .who { min-width: 0; flex: 1; }
+  .opt .who b { display: block; font-weight: 600; }
+  .opt .foot { padding: var(--space-3) var(--space-4); border-top: 1px solid var(--border); color: var(--text-secondary); }
+  .opt.rec { box-shadow: 0 0 0 2px var(--focus-ring); }
+  .tag-rec { display: inline-flex; align-items: center; gap: var(--space-1); padding: 2px var(--space-2); border-radius: var(--radius-pill); background: var(--primary-soft); color: var(--text-brand); }
+
+  /* ---- tipografia ---- */
+  .typerow { display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: var(--space-6); padding: var(--space-4) 0; border-top: 1px solid var(--border); align-items: baseline; }
+  .typerow:first-child { border-top: 0; padding-top: 0; }
+  .typerow .spec span { display: block; }
+  .typerow .spec .meta { color: var(--text-tertiary); }
+  .typerow .ex { min-width: 0; overflow-wrap: anywhere; }
+  @media (max-width: 767px) { .typerow { grid-template-columns: 1fr; gap: var(--space-2); } }
+  .fams { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6); }
+  @media (max-width: 767px) { .fams { grid-template-columns: 1fr; } }
+  .fam { border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--space-5); background: var(--bg-surface); }
+  .fam .big { font-size: 48px; line-height: 56px; display: block; margin: var(--space-2) 0; letter-spacing: -0.02em; }
+  .fam .serif-big { font-family: var(--font-serif); font-style: italic; letter-spacing: 0; }
+  .fam .mono-big { font-family: var(--font-mono); letter-spacing: 0; font-size: 40px; }
+  .mkt-zone { background: var(--bg-surface); color: var(--text); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: var(--space-6); }
+  .mkt-zone .note { display: flex; gap: var(--space-2); align-items: center; color: var(--text-secondary); margin-bottom: var(--space-4); }
+  .mkt-zone .typerow { grid-template-columns: 168px minmax(0, 1fr); }
+  .fluid-display { font-size: clamp(2.75rem, 2.0249rem + 3.0939vw, 4.5rem) !important; }
+  .fluid-h1 { font-size: clamp(2.25rem, 1.7320rem + 2.2099vw, 3.5rem) !important; }
+  .fluid-h2 { font-size: clamp(1.75rem, 1.3356rem + 1.7680vw, 2.75rem) !important; }
+  .fluid-h3 { font-size: clamp(1.375rem, 1.2196rem + 0.6630vw, 1.75rem) !important; }
+  em.accent { font-family: var(--font-serif); font-style: italic; font-weight: 400; letter-spacing: 0; font-size: 1.08em; }
+  .navy-strip { margin-top: var(--space-4); border-radius: var(--radius-lg); padding: var(--space-6); background: var(--bg-page); color: var(--text); }
+  .navy-strip .hl { color: var(--brand-cyan); }
+
+  /* ---- espaço, raios, sombras ---- */
+  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+  @media (max-width: 900px) { .grid2 { grid-template-columns: 1fr; } }
+  .sp-row { display: grid; grid-template-columns: 96px 48px minmax(0, 1fr); gap: var(--space-3); align-items: center; padding: var(--space-1\.5) 0; }
+  .sp-bar { height: 16px; background: var(--primary); border-radius: var(--radius-2xs); }
+  .sp-use { grid-column: 3; color: var(--text-secondary); margin-top: -2px; }
+  .radii { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); }
+  @media (max-width: 599px) { .radii { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .rd .box { height: 64px; width: 112px; max-width: 100%; background: var(--primary-soft); border: 2px solid var(--text-brand); }
+  .rd span { display: block; }
+  .rd .nm { margin-top: var(--space-2); }
+  .shadows { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-5); padding: var(--space-6); background: var(--bg-page); border-radius: var(--radius-lg); border: 1px solid var(--border); }
+  @media (max-width: 900px) { .shadows { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .sh-card { background: var(--bg-surface); border-radius: var(--radius-lg); padding: var(--space-4); min-height: 112px; display: flex; flex-direction: column; justify-content: space-between; }
+  [data-theme="dark"] .sh-card { border: 1px solid var(--border); }
+  .sh-card span { display: block; }
+  .bp { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-2); }
+  @media (max-width: 599px) { .bp { grid-template-columns: 1fr 1fr; } }
+  .bp div { border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--space-3); background: var(--bg-surface); }
+  .bp span { display: block; }
+
+  /* ---- movimento ---- */
+  .mv { width: 100%; border-collapse: collapse; }
+  .mv td, .mv th { padding: var(--space-3); border-bottom: 1px solid var(--border); text-align: left; vertical-align: middle; }
+  .mv th { color: var(--text-secondary); padding-top: 0; }
+  .mv td:first-child, .mv th:first-child { padding-left: 0; }
+  .mv tr:last-child td { border-bottom: 0; }
+  .track { position: relative; height: 24px; border-radius: var(--radius-pill); background: var(--bg-sunken); border: 1px solid var(--border); min-width: 160px; }
+  .dot { position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 9999px; background: var(--primary); transform: translateX(0); }
+  .track.go .dot { transform: translateX(calc(var(--track-w, 160px) - 24px)); }
+  .curve { width: 64px; height: 48px; display: block; }
+  .curve path.c { stroke: var(--text-brand); stroke-width: 2; fill: none; }
+  .curve path.g { stroke: var(--border); stroke-width: 1; fill: none; }
+  .btn-sm { appearance: none; border: 1px solid var(--border-control); background: var(--bg-surface); color: var(--text-brand); font: inherit; font-size: 12px; line-height: 16px; font-weight: 500; min-height: 32px; padding: 0 var(--space-3); border-radius: var(--radius-md); cursor: pointer; display: inline-flex; align-items: center; gap: var(--space-1\.5); transition: background-color var(--duration-fast) var(--ease-standard); }
+  .btn-sm:hover { background: var(--bg-hover); }
+  .btn-sm:active { background: var(--bg-selected); }
+  .rm-note { display: flex; gap: var(--space-2); align-items: flex-start; margin-top: var(--space-4); color: var(--text-secondary); }
+  @media (prefers-reduced-motion: reduce) { * { transition-duration: 0ms !important; animation: none !important; } }
+</style>
+<link rel="stylesheet" href="../tokens.css"><link rel="stylesheet" href="../components/bundle.css"><script src="vendor/react.production.min.js"></script><script src="vendor/react-dom.production.min.js"></script><script src="../components/bundle.js"></script></head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-x" viewBox="0 0 16 16"><path d="M4.5 4.5l7 7m0-7l-7 7" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></symbol>
+  <symbol id="i-ban" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4.2 11.8l7.6-7.6" stroke="currentColor" stroke-width="1.5"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 16 16"><path d="M8 2.5l6 10.5H2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 6.5v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.25" r=".9" fill="currentColor"/></symbol>
+  <symbol id="i-info" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 7.25v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="5" r=".9" fill="currentColor"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 16 16"><path d="M13 9.5A5.5 5.5 0 016.5 3a5.5 5.5 0 106.5 6.5z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+  <symbol id="i-play" viewBox="0 0 16 16"><path d="M5 3.5l7 4.5-7 4.5z" fill="currentColor"/></symbol>
+</svg>
+
+<main class="wrap">
+  <header>
+    <div class="brandline">
+      <img class="logo-color" src="../assets/Logos/tou-logo-cor.webp" alt="TOU">
+      <span class="overline">Design system · Fase 1</span>
+    </div>
+    <div class="top">
+      <div>
+        <h1 class="h1">Fundamentos</h1>
+        <p class="body-lg muted lede">Cores, contraste, tipografia, espaço, forma, profundidade e movimento: a base que o CRM e o site compartilham. Todos os valores vêm do brief; esta página só os organiza e mostra como se comportam nos dois temas do produto.</p>
+      </div>
+      <div class="seg" role="group" aria-label="Tema da página">
+        <button type="button" data-set-theme="light" aria-pressed="true"><svg width="16" height="16" aria-hidden="true"><use href="#i-sun"/></svg>Claro</button>
+        <button type="button" data-set-theme="dark" aria-pressed="false"><svg width="16" height="16" aria-hidden="true"><use href="#i-moon"/></svg>Escuro</button>
+      </div>
+    </div>
+    <nav class="toc label" aria-label="Seções">
+      <a href="#paletas">Paletas</a>
+      <a href="#semanticos">Tokens semânticos</a>
+      <a href="#contraste">Contraste</a>
+      <a href="#tipografia">Tipografia</a>
+      <a href="#espaco">Espaço</a>
+      <a href="#forma">Raios</a>
+      <a href="#profundidade">Sombras</a>
+      <a href="#movimento">Movimento</a>
+    </nav>
+  </header>
+
+  <!-- ===================== PALETAS ===================== -->
+  <section id="paletas" aria-labelledby="h-paletas">
+    <div class="sh">
+      <span class="overline">01 · Cor</span>
+      <h2 class="h2" id="h-paletas">Paletas</h2>
+      <p class="body muted">As escalas brutas. Telas e componentes não usam estes valores diretamente: usam os <a class="link-inline" href="#semanticos" style="color:var(--link)">tokens semânticos</a>, que apontam para cá.</p>
+    </div>
+
+    <div class="panel">
+      <div class="sub"><h3 class="h4">Primária</h3><span class="small legend"><i></i> a única cor de interface (600)</span></div>
+      <div class="scale" data-swatches="primary-50 primary-100 primary-200 primary-300 primary-400 primary-500 primary-600 primary-700 primary-800 primary-900 primary-950" data-key="primary-600"></div>
+
+      <div class="sub"><h3 class="h4">Ink</h3><span class="small meta">cinzas levemente azulados: a base do claro e do marinho</span></div>
+      <div class="scale" data-swatches="ink-50 ink-100 ink-200 ink-300 ink-400 ink-500 ink-600 ink-700 ink-800 ink-900 ink-950"></div>
+
+      <div class="grid2" style="margin-top:var(--space-8)">
+        <div>
+          <div class="sub"><h3 class="h4">Cinzas do escuro</h3><span class="small meta">só no tema escuro do produto</span></div>
+          <div class="scale few" data-swatches="gray-950 gray-900 gray-800" data-uses="Fundo da página e poço|Superfície: card, modal, menu|Hover, chip e selecionado"></div>
+        </div>
+        <div>
+          <div class="sub"><h3 class="h4">Papéis do marketing</h3><span class="small meta">só no site</span></div>
+          <div class="scale few" data-swatches="paper-50 paper-100 paper-200" data-uses="Seção alternada|Faixa de logos, FAQ|Divisor sobre papel"></div>
+        </div>
+      </div>
+
+      <div class="sub"><h3 class="h4">Ciano de marca</h3><span class="small meta">o gradiente do logotipo: acento, nunca interface</span></div>
+      <div class="scale few" data-swatches="brand-blue brand-cyan brand-teal" data-uses="Início do gradiente|Meio do gradiente|Fim do gradiente"></div>
+      <div class="gradient" role="img" aria-label="Gradiente de marca, de brand-blue a brand-teal"></div>
+      <ul class="rule-list body">
+        <li><svg class="ok-ic" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg><span>Brilhos, malhas de fundo do hero, ilustração, bordas finas de destaque e uma palavra de título sobre o marinho.</span></li>
+        <li><svg class="no-ic" width="16" height="16" aria-hidden="true"><use href="#i-ban"/></svg><span><b>Nunca</b> texto branco sobre o gradiente ou sobre ciano (2,2–3,0:1). <b>Nunca</b> ciano como cor de texto sobre fundo claro.</span></li>
+      </ul>
+    </div>
+
+    <div class="sub" style="margin-top:var(--space-10)"><h3 class="h4">Estados</h3><span class="small meta">texto · fundo suave · sólido com o texto que vai sobre ele. Info é a primária.</span></div>
+    <div class="states">
+      <div class="state-theme" data-theme="light"><span class="overline">Claro</span><div data-states></div></div>
+      <div class="state-theme" data-theme="dark"><span class="overline">Escuro</span><div data-states></div></div>
+    </div>
+  </section>
+
+  <!-- ===================== SEMÂNTICOS ===================== -->
+  <section id="semanticos" aria-labelledby="h-sem">
+    <div class="sh">
+      <span class="overline">02 · Papéis</span>
+      <h2 class="h2" id="h-sem">Tokens semânticos</h2>
+      <p class="body muted">O que componentes e telas consomem. Cada linha mostra o mesmo token nos dois temas do produto, lado a lado.</p>
+    </div>
+    <div class="panel scroll-x">
+      <table class="duo" id="semtable">
+        <thead><tr><th class="label-sm">Token</th><th class="label-sm">Uso</th><th class="label-sm cellwrap">Claro</th><th class="label-sm cellwrap">Escuro</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================== CONTRASTE ===================== -->
+  <section id="contraste" aria-labelledby="h-con">
+    <div class="sh">
+      <span class="overline">03 · Acessibilidade</span>
+      <h2 class="h2" id="h-con">Pares de contraste</h2>
+      <p class="body muted">Razões WCAG 2 calculadas a partir dos tokens publicados. Texto pede 4,5:1; texto desabilitado, bordas de campo, anel de foco e ícones que carregam informação pedem 3:1.</p>
+    </div>
+    <div class="panel scroll-x">
+      <table class="duo" id="contable">
+        <thead><tr><th class="label-sm">Par</th><th class="label-sm">Mín.</th><th class="label-sm cellwrap">Claro</th><th class="label-sm cellwrap">Escuro</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="adjust" role="region" aria-labelledby="h-adj">
+      <div class="head">
+        <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true"><use href="#i-check"/></svg>
+        <div>
+          <span class="overline" style="color:var(--success)">Ajuste ao brief · aprovado</span>
+          <h3 class="h3" id="h-adj" style="margin-top:var(--space-1)">Texto terciário sobre hover e selecionado no escuro</h3>
+          <p class="body" style="margin-top:var(--space-2)">O brief definia <code>text-tertiary</code> escuro como <code>#7E8B94</code>, que reprovava sobre <code>bg-hover</code>/<code>bg-selected</code> (<code>#333333</code>, 3,61:1). A opção B foi aprovada: o terciário escuro agora é <code>#929EA6</code>. As três opções ficam aqui como registro.</p>
+        </div>
+      </div>
+      <div class="opts" id="adj-opts"></div>
+      <p class="body" style="margin-top:var(--space-5)">A opção B muda um valor só no tema escuro (o marinho continua com <code>#7E8B94</code>, que passa sobre o hover dele) e mantém o terciário mais apagado que o secundário, sem exigir que cada componente troque a cor do metadado no hover.</p>
+    </div>
+  </section>
+
+  <!-- ===================== TIPOGRAFIA ===================== -->
+  <section id="tipografia" aria-labelledby="h-tipo">
+    <div class="sh">
+      <span class="overline">04 · Tipografia</span>
+      <h2 class="h2" id="h-tipo">Escala tipográfica</h2>
+      <p class="body muted">Geist é a única sans. Geist Mono para IDs, valores e código. Instrument Serif itálico só como destaque no marketing.</p>
+    </div>
+
+    <div class="fams">
+      <div class="fam"><span class="overline meta">Sans · produto e site</span><span class="big" style="font-weight:600">Geist</span><span class="small muted">400 texto · 500 rótulos · 600 títulos · 700 reserva</span></div>
+      <div class="fam"><span class="overline meta">Mono · IDs e valores</span><span class="big mono-big">#1118909</span><span class="small muted">Números tabulares: horários, valores, protocolos</span></div>
+      <div class="fam"><span class="overline meta">Serif · só destaque no site</span><span class="big serif-big">única</span><span class="small muted">Uma palavra num título ou uma citação</span></div>
+    </div>
+
+    <div class="panel">
+      <div class="sub"><h3 class="h4">Produto</h3><span class="small meta">base 14px, densa</span></div>
+      <div id="type-product">
+        <div class="typerow" data-style="display"><div class="spec"></div><div class="ex display" style="font-variant-numeric:tabular-nums">R$ 48.920,00</div></div>
+        <div class="typerow" data-style="h1"><div class="spec"></div><div class="ex h1">Lista de contatos</div></div>
+        <div class="typerow" data-style="h2"><div class="spec"></div><div class="ex h2">Notificações recentes</div></div>
+        <div class="typerow" data-style="h3"><div class="spec"></div><div class="ex h3">Adicionar contato</div></div>
+        <div class="typerow" data-style="h4"><div class="spec"></div><div class="ex h4">Dados do contato</div></div>
+        <div class="typerow" data-style="h5"><div class="spec"></div><div class="ex h5">Fila: Agendamentos · Odontologia</div></div>
+        <div class="typerow" data-style="h6"><div class="spec"></div><div class="ex h6">Mariana Couto</div></div>
+        <div class="typerow" data-style="body-lg"><div class="spec"></div><div class="ex body-lg">Nenhum contato encontrado com esses filtros. Tente remover a etiqueta "Lead quente" ou buscar por outro nome.</div></div>
+        <div class="typerow" data-style="body"><div class="spec"></div><div class="ex body">Olá, Mariana! Sua consulta com a Dra. Helena está confirmada para sábado, 11/10, às 9h. Responda 1 para confirmar ou 2 para remarcar.</div></div>
+        <div class="typerow" data-style="small"><div class="spec"></div><div class="ex small muted">WhatsApp API · atribuído a Ana · atualizado há 5 minutos</div></div>
+        <div class="typerow" data-style="caption"><div class="spec"></div><div class="ex caption muted">Digite o número com DDD, por exemplo (13) 99700-0000.</div></div>
+        <div class="typerow" data-style="label"><div class="spec"></div><div class="ex label">Número do WhatsApp</div></div>
+        <div class="typerow" data-style="label-sm"><div class="spec"></div><div class="ex label-sm">Campanha #3706 · Em atendimento</div></div>
+        <div class="typerow" data-style="overline"><div class="spec"></div><div class="ex overline muted">Automações e IA</div></div>
+        <div class="typerow" data-style="mono"><div class="spec"></div><div class="ex mono" style="font-family:var(--font-mono)">#1118909 · 11:54 · R$ 500,00 · +55 (13) 99700-1201</div></div>
+      </div>
+    </div>
+
+    <div class="mkt-zone" data-theme="light" style="margin-top:var(--space-6)">
+      <div class="sub"><h3 class="h4">Marketing</h3><span class="small meta">fluida de 375 a 1280px de viewport</span></div>
+      <p class="note small"><svg width="16" height="16" aria-hidden="true"><use href="#i-info"/></svg>O site só tem tema claro: este bloco fica claro mesmo com a página no escuro. As seções escuras do site usam o tema marinho, como na faixa abaixo.</p>
+      <div id="type-mkt">
+        <div class="typerow" data-style="mkt-eyebrow"><div class="spec"></div><div class="ex mkt-eyebrow" style="color:var(--text-brand)">Plataforma · CRM + IA + BI</div></div>
+        <div class="typerow" data-style="mkt-display" data-fluid="44→72"><div class="spec"></div><div class="ex mkt-display fluid-display">Atenda mais. Venda mais.</div></div>
+        <div class="typerow" data-style="mkt-h1" data-fluid="36→56"><div class="spec"></div><div class="ex mkt-h1 fluid-h1">Visão completa da sua clínica.</div></div>
+        <div class="typerow" data-style="mkt-h2" data-fluid="28→44"><div class="spec"></div><div class="ex mkt-h2 fluid-h2">O controle da sua operação em uma <em class="accent">única</em> plataforma</div></div>
+        <div class="typerow" data-style="mkt-h3" data-fluid="22→28"><div class="spec"></div><div class="ex mkt-h3 fluid-h3">Centralização da operação</div></div>
+        <div class="typerow" data-style="mkt-lead"><div class="spec"></div><div class="ex mkt-lead muted">Automação de atendimento e agenda organizada pra sua clínica vender mais procedimentos sem contratar mais gente.</div></div>
+        <div class="typerow" data-style="mkt-body"><div class="spec"></div><div class="ex mkt-body muted">Conecte WhatsApp, CRM, automações e dados em uma única plataforma, sem integrações complexas ou planilhas. Tenha o controle da operação do primeiro contato ao fechamento.</div></div>
+        <div class="typerow" data-style="mkt-accent"><div class="spec"></div><div class="ex mkt-body"><em class="accent" style="font-size:28px;line-height:36px">"Em três meses, dobramos as consultas agendadas pelo WhatsApp."</em></div></div>
+      </div>
+      <div class="navy-strip" data-theme="navy">
+        <span class="mkt-eyebrow" style="color:var(--text-secondary);display:block;margin-bottom:var(--space-3)">Seção escura · tema marinho</span>
+        <p class="mkt-h2 fluid-h2">Tudo com a mesma <span class="hl">equipe</span>.</p>
+        <p class="mkt-lead" style="color:var(--text-secondary);margin-top:var(--space-3)">Sobre o marinho, uma palavra pode ir em <code style="color:var(--text)">brand-cyan</code> (9,2:1). O texto corrido continua em <code style="color:var(--text)">text</code> e <code style="color:var(--text)">text-secondary</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ESPAÇO ===================== -->
+  <section id="espaco" aria-labelledby="h-esp">
+    <div class="sh">
+      <span class="overline">05 · Espaço</span>
+      <h2 class="h2" id="h-esp">Espaçamento e breakpoints</h2>
+      <p class="body muted">Base 4px. Só estes passos.</p>
+    </div>
+    <div class="panel" id="spacing"></div>
+    <div class="sub" style="margin-top:var(--space-8)"><h3 class="h4">Breakpoints</h3><span class="small meta">min-width</span></div>
+    <div class="bp" id="bps"></div>
+  </section>
+
+  <!-- ===================== RAIOS ===================== -->
+  <section id="forma" aria-labelledby="h-forma">
+    <div class="sh">
+      <span class="overline">06 · Forma</span>
+      <h2 class="h2" id="h-forma">Raios</h2>
+      <p class="body muted">Ou é pílula, ou é um raio da escala. Nada de "quase pílula".</p>
+    </div>
+    <div class="panel"><div class="radii" id="radii"></div></div>
+  </section>
+
+  <!-- ===================== SOMBRAS ===================== -->
+  <section id="profundidade" aria-labelledby="h-prof">
+    <div class="sh">
+      <span class="overline">07 · Profundidade</span>
+      <h2 class="h2" id="h-prof">Sombras</h2>
+      <p class="body muted">Cinco níveis, tingidos de ink no claro. No escuro, a separação vem da superfície mais clara e da borda: <code>shadow-xs</code> e <code>shadow-sm</code> somem, e só camadas flutuantes mantêm uma sombra.</p>
+    </div>
+    <div class="shadows" id="shadows"></div>
+  </section>
+
+  <!-- ===================== MOVIMENTO ===================== -->
+  <section id="movimento" aria-labelledby="h-mov">
+    <div class="sh">
+      <span class="overline">08 · Movimento</span>
+      <h2 class="h2" id="h-mov">Durações e curvas</h2>
+      <p class="body muted">Movimento confirma uma ação; nunca é decoração no produto.</p>
+    </div>
+    <div style="display:grid;gap:var(--space-4)">
+      <div class="panel scroll-x">
+        <table class="mv" id="durations"><thead><tr><th class="label-sm">Duração</th><th class="label-sm">Uso</th><th class="label-sm">Ver</th></tr></thead><tbody></tbody></table>
+      </div>
+      <div class="panel scroll-x">
+        <table class="mv" id="easings"><thead><tr><th class="label-sm">Curva</th><th class="label-sm">Forma</th><th class="label-sm">Uso</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+    <p class="rm-note body"><svg width="16" height="16" aria-hidden="true" style="flex:none;margin-top:2px"><use href="#i-info"/></svg><span>Com <code>prefers-reduced-motion: reduce</code>, transições viram troca instantânea e toda animação contínua (faixa de logos, brilhos, skeleton, autoplay de abas) para. Esta página respeita a preferência: com ela ligada, os botões "Reproduzir" pulam direto para o fim.</span></p>
+  </section>
+</main>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  if (!root.getAttribute('data-theme')) root.setAttribute('data-theme', 'light');
+
+  /* ---------- utilidades de cor ---------- */
+  function parse(c) {
+    var m = c.match(/rgba?\(([^)]+)\)/);
+    if (!m) return null;
+    var p = m[1].split(/[ ,/]+/).filter(Boolean).map(Number);
+    return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 };
+  }
+  function hex(c) {
+    var o = parse(c); if (!o) return c;
+    var h = '#' + [o.r, o.g, o.b].map(function (v) { return Math.round(v).toString(16).padStart(2, '0'); }).join('').toUpperCase();
+    if (o.a < 1) h += Math.round(o.a * 255).toString(16).padStart(2, '0').toUpperCase();
+    return h;
+  }
+  function over(fg, bg) { var a = fg.a; return { r: fg.r * a + bg.r * (1 - a), g: fg.g * a + bg.g * (1 - a), b: fg.b * a + bg.b * (1 - a), a: 1 }; }
+  function lum(o) { function f(v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); } return 0.2126 * f(o.r) + 0.7152 * f(o.g) + 0.0722 * f(o.b); }
+  function ratio(fg, bg) { var f = fg.a < 1 ? over(fg, bg) : fg; var a = lum(f), b = lum(bg); var hi = Math.max(a, b), lo = Math.min(a, b); return (hi + 0.05) / (lo + 0.05); }
+  function fmt(r) { return r.toFixed(2).replace('.', ',') + ':1'; }
+
+  var probeHost = document.createElement('div');
+  probeHost.style.cssText = 'position:absolute;left:-9999px;top:0;';
+  document.body.appendChild(probeHost);
+  function resolve(token, theme) {
+    var s = document.createElement('div');
+    if (theme) s.setAttribute('data-theme', theme);
+    var v = token.charAt(0) === '#' ? token : 'var(--' + token + ')';
+    s.style.backgroundColor = v;
+    probeHost.appendChild(s);
+    var out = getComputedStyle(s).backgroundColor;
+    probeHost.removeChild(s);
+    return out;
+  }
+  function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+  function icon(id, size) { return '<svg width="' + (size || 16) + '" height="' + (size || 16) + '" aria-hidden="true"><use href="#' + id + '"/></svg>'; }
+
+  /* ---------- paletas ---------- */
+  document.querySelectorAll('[data-swatches]').forEach(function (box) {
+    var names = box.getAttribute('data-swatches').split(' ');
+    var uses = (box.getAttribute('data-uses') || '').split('|');
+    var key = box.getAttribute('data-key');
+    names.forEach(function (n, i) {
+      var sw = el('div', 'sw' + (n === key ? ' key' : ''));
+      var chip = el('div', 'chip'); chip.style.background = 'var(--' + n + ')'; chip.setAttribute('aria-hidden', 'true');
+      sw.appendChild(chip);
+      sw.appendChild(el('span', 'nm label-sm', n));
+      sw.appendChild(el('span', 'hx mono', hex(resolve(n))));
+      if (uses[i]) sw.appendChild(el('span', 'use caption', uses[i]));
+      box.appendChild(sw);
+    });
+  });
+
+  /* ---------- estados ---------- */
+  var STATES = [
+    { k: 'success', label: 'Sucesso', ic: 'i-check', word: 'Conectado', on: 'on-success' },
+    { k: 'warning', label: 'Alerta', ic: 'i-alert', word: 'Sem WhatsApp', on: 'on-warning' },
+    { k: 'danger', label: 'Erro', ic: 'i-x', word: 'Rejeitado', on: 'on-danger' },
+    { k: 'info', label: 'Info', ic: 'i-info', word: 'Novo lead', on: 'text-on-primary' }
+  ];
+  document.querySelectorAll('[data-states]').forEach(function (box) {
+    var theme = box.parentNode.getAttribute('data-theme');
+    var head = el('div', 'state-row');
+    head.innerHTML = '<span></span><span class="caption meta">Texto</span><span class="caption meta">Suave</span><span class="caption meta">Sólido</span>';
+    box.appendChild(head);
+    STATES.forEach(function (s) {
+      var r = el('div', 'state-row');
+      r.appendChild(el('span', 'lbl label-sm', s.label));
+      r.appendChild(el('div', '', '<span class="pill pill-text label-sm" style="color:var(--' + s.k + ')">' + icon(s.ic, 14) + s.word + '</span><span class="hexs mono">' + hex(resolve(s.k, theme)) + '</span>'));
+      r.appendChild(el('div', '', '<span class="pill label-sm" style="color:var(--' + s.k + ');background:var(--' + s.k + '-soft)">' + icon(s.ic, 14) + s.word + '</span><span class="hexs mono">' + hex(resolve(s.k + '-soft', theme)) + '</span>'));
+      r.appendChild(el('div', '', '<span class="pill label-sm" style="color:var(--' + s.on + ');background:var(--' + s.k + '-solid)">' + icon(s.ic, 14) + s.word + '</span><span class="hexs mono">' + hex(resolve(s.k + '-solid', theme)) + ' + ' + hex(resolve(s.on, theme)) + '</span>'));
+      box.appendChild(r);
+    });
+  });
+
+  /* ---------- semânticos ---------- */
+  var SEM = [
+    ['bg-page', 'bg', 'Fundo da página do produto'],
+    ['bg-surface', 'bg', 'Superfície: card, modal, tabela, menu'],
+    ['bg-sunken', 'bg', 'Fundo sutil / poço: chat, filtros'],
+    ['bg-hover', 'bg', 'Hover de linha e item'],
+    ['bg-selected', 'bg', 'Item ativo, linha selecionada'],
+    ['text', 'text', 'Texto principal'],
+    ['text-secondary', 'text', 'Texto secundário, cabeçalho de tabela'],
+    ['text-tertiary', 'text', 'Placeholder, metadados, horário'],
+    ['text-disabled', 'text', 'Controle desabilitado'],
+    ['link', 'text', 'Link inline e externo'],
+    ['text-brand', 'text', 'Texto na cor da marca: aba ativa, botão secundário'],
+    ['border', 'border', 'Divisor e contorno de card'],
+    ['border-control', 'control', 'Contorno de input, checkbox, radio'],
+    ['focus-ring', 'ring', 'Anel de foco (teclado)'],
+    ['primary', 'fill', 'Botão primário, switch ligado, aba ativa']
+  ];
+  var tb = document.querySelector('#semtable tbody');
+  SEM.forEach(function (row) {
+    var tr = el('tr');
+    tr.appendChild(el('td', 'tk', '<span class="label">' + row[0] + '</span>'));
+    tr.appendChild(el('td', 'small muted', row[2]));
+    ['light', 'dark'].forEach(function (th) {
+      var td = el('td', 'cellwrap');
+      var c = el('div', 'th-cell'); c.setAttribute('data-theme', th);
+      var s = el('div', 's');
+      var v = 'var(--' + row[0] + ')';
+      if (row[1] === 'bg' || row[1] === 'fill') { s.style.background = v; s.style.boxShadow = 'inset 0 0 0 1px var(--border)'; }
+      if (row[1] === 'text') { s.style.background = 'var(--bg-surface)'; s.style.color = v; s.textContent = 'Aa'; s.style.boxShadow = 'inset 0 0 0 1px var(--border)'; }
+      if (row[1] === 'border') { s.style.background = 'var(--bg-surface)'; s.style.border = '1px solid ' + v; }
+      if (row[1] === 'control') { s.style.background = 'var(--bg-surface)'; s.style.border = '1px solid ' + v; s.style.borderRadius = 'var(--radius-md)'; }
+      if (row[1] === 'ring') { s.style.background = 'var(--bg-surface)'; s.style.boxShadow = '0 0 0 2px var(--bg-page), 0 0 0 4px ' + v; s.style.width = '32px'; s.style.height = '24px'; s.style.margin = '4px'; }
+      s.setAttribute('aria-hidden', 'true');
+      c.appendChild(s);
+      var h = hex(resolve(row[0], th));
+      var label = h.length === 9 && h.slice(0, 7) === '#FFFFFF' ? 'branco ' + Math.round(parseInt(h.slice(7), 16) / 2.55) + '%' : '';
+      c.appendChild(el('div', 'v', '<span class="mono">' + h + '</span>' + (label ? '<span class="caption meta">' + label + '</span>' : '')));
+      td.appendChild(c); tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  });
+
+  /* ---------- contraste ---------- */
+  var PAIRS = [
+    ['text', 'bg-surface', 4.5, 'Texto principal sobre superfície'],
+    ['text', 'bg-page', 4.5, 'Texto principal sobre página'],
+    ['text-secondary', 'bg-surface', 4.5, 'Secundário sobre superfície'],
+    ['text-secondary', 'bg-hover', 4.5, 'Secundário sobre hover'],
+    ['text-tertiary', 'bg-surface', 4.5, 'Terciário sobre superfície'],
+    ['text-tertiary', 'bg-sunken', 4.5, 'Terciário sobre poço'],
+    ['text-tertiary', 'bg-hover', 4.5, 'Terciário sobre hover / selecionado'],
+    ['text-disabled', 'bg-surface', 3, 'Desabilitado sobre superfície'],
+    ['link', 'bg-surface', 4.5, 'Link sobre superfície'],
+    ['link', 'bg-sunken', 4.5, 'Link sobre poço'],
+    ['text-brand', 'bg-selected', 4.5, 'Texto da marca sobre selecionado'],
+    ['text-on-primary', 'primary', 4.5, 'Branco sobre botão primário'],
+    ['text-on-primary', 'primary-hover', 4.5, 'Branco sobre primário em hover'],
+    ['border-control', 'bg-surface', 3, 'Borda de campo sobre superfície', 'mark'],
+    ['focus-ring', 'bg-surface', 3, 'Anel de foco sobre superfície', 'mark'],
+    ['success', 'success-soft', 4.5, 'Sucesso sobre suave'],
+    ['warning', 'warning-soft', 4.5, 'Alerta sobre suave'],
+    ['danger', 'danger-soft', 4.5, 'Erro sobre suave'],
+    ['info', 'info-soft', 4.5, 'Info sobre suave'],
+    ['on-warning', 'warning-solid', 4.5, 'Texto escuro sobre âmbar sólido'],
+    ['on-danger', 'danger-solid', 4.5, 'Branco sobre erro sólido'],
+    ['on-success', 'success-solid', 4.5, 'Branco sobre sucesso sólido']
+  ];
+  var BAN = [
+    ['#FFFFFF', 'brand-cyan', 'Branco sobre ciano'],
+    ['#FFFFFF', 'brand-blue', 'Branco sobre o início do gradiente'],
+    ['brand-cyan', '#FFFFFF', 'Ciano como texto sobre branco'],
+    ['primary-600', 'ink-100', 'Primária 600 como texto fora do branco (use o 700)']
+  ];
+  function verdict(r, min) {
+    return r >= min
+      ? '<span class="verdict pass label-sm">' + icon('i-check', 14) + 'Passa</span>'
+      : '<span class="verdict fail label-sm">' + icon('i-x', 14) + 'Reprova</span>';
+  }
+  var ct = document.querySelector('#contable tbody');
+  PAIRS.forEach(function (p) {
+    var tr = el('tr');
+    tr.appendChild(el('td', 'tk', '<span class="label">' + p[3] + '</span><span class="mono meta">' + p[0] + ' / ' + p[1] + '</span>'));
+    tr.appendChild(el('td', '', '<span class="num">' + fmt(p[2]) + '</span>'));
+    ['light', 'dark'].forEach(function (th) {
+      var fg = parse(resolve(p[0], th)), bg = parse(resolve(p[1], th));
+      var r = ratio(fg, bg);
+      var td = el('td', 'cellwrap');
+      var w = el('div', 'ratio');
+      var s = el('div', 'sample' + (p[4] === 'mark' ? ' mark' : '')); s.setAttribute('data-theme', th);
+      s.style.background = 'var(--' + p[1] + ')';
+      s.style.setProperty('--probe-fg', 'var(--' + p[0] + ')');
+      if (p[4] !== 'mark') { s.style.color = 'var(--' + p[0] + ')'; s.textContent = 'Aa Texto'; }
+      s.setAttribute('aria-hidden', 'true');
+      w.appendChild(s);
+      w.appendChild(el('div', '', '<span class="num">' + fmt(r) + '</span>' + verdict(r, p[2])));
+      td.appendChild(w); tr.appendChild(td);
+    });
+    ct.appendChild(tr);
+  });
+  var sep = el('tr'); sep.appendChild(el('td', '', '<span class="overline" style="color:var(--danger)">Proibidos</span>')); sep.firstChild.colSpan = 4; sep.firstChild.style.paddingTop = 'var(--space-6)'; ct.appendChild(sep);
+  BAN.forEach(function (p) {
+    var fg = parse(resolve(p[0], 'light')), bg = parse(resolve(p[1], 'light'));
+    var r = ratio(fg, bg);
+    var tr = el('tr');
+    tr.appendChild(el('td', 'tk', '<span class="label">' + p[2] + '</span><span class="mono meta">' + p[0] + ' / ' + p[1] + '</span>'));
+    tr.appendChild(el('td', '', '<span class="num">' + fmt(4.5) + '</span>'));
+    var td = el('td', 'cellwrap');
+    var w = el('div', 'ratio');
+    var s = el('div', 'sample'); s.setAttribute('aria-hidden', 'true');
+    s.style.background = p[1].charAt(0) === '#' ? p[1] : 'var(--' + p[1] + ')';
+    s.style.color = p[0].charAt(0) === '#' ? p[0] : 'var(--' + p[0] + ')';
+    s.textContent = 'Aa Texto';
+    w.appendChild(s);
+    w.appendChild(el('div', '', '<span class="num">' + fmt(r) + '</span><span class="verdict ban label-sm">' + icon('i-ban', 14) + 'Não usar</span>'));
+    td.appendChild(w); tr.appendChild(td);
+    tr.appendChild(el('td', 'cellwrap small na', 'Vale para qualquer tema'));
+    ct.appendChild(tr);
+  });
+
+  /* ---------- opções do ajuste ---------- */
+  var PROPOSED = '#929EA6';
+  var OPTS = [
+    { id: 'hoje', title: 'Brief (#7E8B94)', meta: '#7E8B94', metaHex: '#7E8B94', note: 'Metadado some no hover.' },
+    { id: 'a', title: 'A · secundário no hover', meta: 'var(--text-secondary)', metaHex: null, note: 'Troca de cor por componente no hover e no selecionado.' },
+    { id: 'b', title: 'B · aprovada: ' + PROPOSED, meta: PROPOSED, metaHex: PROPOSED, note: 'Só no tema escuro. Passa em todas as superfícies.', rec: true }
+  ];
+  var box = document.getElementById('adj-opts');
+  var darkHover = parse(resolve('bg-hover', 'dark')), darkSurf = parse(resolve('bg-surface', 'dark')), darkPage = parse(resolve('bg-page', 'dark'));
+  OPTS.forEach(function (o) {
+    var card = el('div', 'opt' + (o.rec ? ' rec' : '')); card.setAttribute('data-theme', 'dark');
+    var mHover = o.id === 'a' ? 'var(--text-secondary)' : o.meta;
+    var mRest = o.id === 'a' ? 'var(--text-tertiary)' : o.meta;
+    var cHover = o.metaHex ? parse(resolve(o.metaHex)) : parse(resolve(o.id === 'a' ? 'text-secondary' : 'text-tertiary', 'dark'));
+    var cRest = o.metaHex ? parse(resolve(o.metaHex)) : parse(resolve('text-tertiary', 'dark'));
+    var rh = ratio(cHover, darkHover), rs = ratio(cRest, darkSurf), rp = ratio(cRest, darkPage);
+    card.innerHTML =
+      '<div class="cap"><span class="label">' + o.title + '</span>' + (o.rec ? '<span class="tag-rec label-sm">' + icon('i-check', 14) + 'Aprovada</span>' : '') + '</div>' +
+      '<div class="rows">' +
+        '<div class="row"><span class="av">RN</span><span class="who"><b>Rafael Nunes</b><span class="small" style="color:' + mRest + '">(13) 99700-3415 · há 2 h</span></span></div>' +
+        '<div class="row is-hover"><span class="av">MC</span><span class="who"><b>Mariana Couto</b><span class="small" style="color:' + mHover + '">(13) 99700-1201 · há 5 min</span></span></div>' +
+      '</div>' +
+      '<div class="foot small"><span class="num">hover ' + fmt(rh) + ' · superfície ' + fmt(rs) + ' · página ' + fmt(rp) + '</span>' + (rh >= 4.5 ? '<span class="verdict pass label-sm">' + icon('i-check', 14) + 'Passa</span>' : '<span class="verdict fail label-sm">' + icon('i-x', 14) + 'Reprova no hover</span>') + '<span style="display:block;margin-top:var(--space-1)">' + o.note + '</span></div>';
+    box.appendChild(card);
+  });
+
+  /* ---------- tipografia: especificações lidas do estilo aplicado ---------- */
+  document.querySelectorAll('.typerow').forEach(function (row) {
+    var name = row.getAttribute('data-style');
+    var ex = row.querySelector('.ex');
+    var target = name === 'mkt-accent' ? ex.querySelector('em') : ex;
+    var cs = getComputedStyle(target);
+    var fs = parseFloat(cs.fontSize), lh = cs.lineHeight;
+    var lhTxt = lh === 'normal' ? '—' : (Math.round(parseFloat(lh) * 10) / 10);
+    var fluid = row.getAttribute('data-fluid');
+    var sizeTxt = fluid ? fluid + 'px' : (Math.round(fs) + ' / ' + lhTxt);
+    var ls = cs.letterSpacing === 'normal' ? '' : ' · ' + (Math.round(parseFloat(cs.letterSpacing) / fs * 1000) / 10).toString().replace('.', ',') + '%';
+    var fam = /Mono/.test(cs.fontFamily) ? 'Geist Mono' : /Instrument/.test(cs.fontFamily) ? 'Instrument Serif itálico' : 'Geist';
+    if (name === 'mkt-accent') sizeTxt = 'herda o título';
+    row.querySelector('.spec').innerHTML = '<span class="label">' + name + '</span><span class="caption meta">' + sizeTxt + ' · ' + cs.fontWeight + ls + '</span><span class="caption meta">' + fam + '</span>';
+  });
+
+  /* ---------- espaço ---------- */
+  var SP = [['space-0.5', 'Deslocamento do anel de foco'], ['space-1', 'Ícone e texto em chips'], ['space-1.5', 'Ícone e texto em botão 32'], ['space-2', 'Rótulo e campo; ícone e texto em botão 40'], ['space-2.5', 'Padding vertical de input e célula'], ['space-3', 'Padding de botão 32 e de célula'], ['space-4', 'Padding de botão 40/48 e input; gutter mobile'], ['space-5', 'Padding de card denso e popover'], ['space-6', 'Padding de card e modal'], ['space-8', 'Margem da página do produto'], ['space-10', 'Entre blocos da página'], ['space-12', 'Respiro de estado vazio'], ['space-16', 'Título de seção e conteúdo no site'], ['space-20', 'Seção do site no tablet'], ['space-24', 'Seção do site no desktop']];
+  var spBox = document.getElementById('spacing');
+  SP.forEach(function (s) {
+    var probe = el('div'); probe.style.width = 'var(--' + s[0].replace('.', '\\.') + ')'; probeHost.appendChild(probe);
+    var px = Math.round(parseFloat(getComputedStyle(probe).width)); probeHost.removeChild(probe);
+    var r = el('div', 'sp-row');
+    r.appendChild(el('span', 'label', s[0]));
+    r.appendChild(el('span', 'num meta', px + 'px'));
+    var bar = el('div', ''); bar.innerHTML = '<div class="sp-bar" style="width:' + px + 'px" aria-hidden="true"></div><div class="caption muted" style="margin-top:var(--space-1)">' + s[1] + '</div>';
+    r.appendChild(bar);
+    spBox.appendChild(r);
+  });
+  [['bp-sm', '600', 'Celular grande'], ['bp-md', '768', 'Tablet: tabela volta'], ['bp-lg', '1024', 'Desktop: menu fixo'], ['bp-xl', '1280', 'Tipografia fluida no máximo'], ['bp-2xl', '1536', 'Telas grandes']].forEach(function (b) {
+    document.getElementById('bps').appendChild(el('div', '', '<span class="label">' + b[0] + '</span><span class="num">' + b[1] + 'px</span><span class="caption muted">' + b[2] + '</span>'));
+  });
+
+  /* ---------- raios ---------- */
+  [['radius-2xs', 'Indicadores'], ['radius-xs', 'Checkbox'], ['radius-sm', 'Controles pequenos'], ['radius-md', 'Botões, inputs, células'], ['radius-lg', 'Cards, popovers'], ['radius-xl', 'Modais, gavetas'], ['radius-2xl', 'Cards de marketing'], ['radius-pill', 'CTA, chips, avatares']].forEach(function (r) {
+    var probe = el('div'); probe.style.borderRadius = 'var(--' + r[0] + ')'; probeHost.appendChild(probe);
+    var v = getComputedStyle(probe).borderTopLeftRadius; probeHost.removeChild(probe);
+    var d = el('div', 'rd');
+    d.innerHTML = '<div class="box" style="border-radius:var(--' + r[0] + ')" aria-hidden="true"></div><span class="label nm">' + r[0] + '</span><span class="num meta">' + (parseFloat(v) > 999 ? 'pílula' : Math.round(parseFloat(v)) + 'px') + '</span><span class="caption muted">' + r[1] + '</span>';
+    document.getElementById('radii').appendChild(d);
+  });
+
+  /* ---------- sombras ---------- */
+  [['shadow-xs', 'Botão secundário, input'], ['shadow-sm', 'Card elevado, kanban'], ['shadow-md', 'Popover, menu, hover'], ['shadow-lg', 'Toast, gaveta'], ['shadow-xl', 'Modal']].forEach(function (s) {
+    var c = el('div', 'sh-card'); c.style.boxShadow = 'var(--' + s[0] + ')';
+    c.innerHTML = '<span class="label">' + s[0] + '</span><span class="caption muted">' + s[1] + '</span>';
+    document.getElementById('shadows').appendChild(c);
+  });
+
+  /* ---------- movimento ---------- */
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  [['duration-instant', 'Feedback: pressionado, checkbox, switch'], ['duration-fast', 'Hover e foco'], ['duration-base', 'Padrão: popover, tooltip, abas'], ['duration-slow', 'Modal e gaveta'], ['duration-slower', 'Só site: entrada de seções']].forEach(function (d) {
+    var probe = el('div'); probe.style.transitionDuration = 'var(--' + d[0] + ')'; probeHost.appendChild(probe);
+    var ms = Math.round(parseFloat(getComputedStyle(probe).transitionDuration) * 1000); probeHost.removeChild(probe);
+    var tr = el('tr');
+    tr.appendChild(el('td', '', '<span class="label" style="display:block">' + d[0] + '</span><span class="num meta">' + ms + 'ms</span>'));
+    tr.appendChild(el('td', 'small muted', d[1]));
+    var td = el('td'); td.style.width = '45%';
+    var wrap = el('div', ''); wrap.style.cssText = 'display:flex;gap:var(--space-3);align-items:center';
+    var track = el('div', 'track'); track.setAttribute('aria-hidden', 'true');
+    var dot = el('div', 'dot'); dot.style.transition = 'transform var(--' + d[0] + ') var(--ease-standard)';
+    track.appendChild(dot);
+    var btn = el('button', 'btn-sm', icon('i-play', 12) + 'Reproduzir'); btn.type = 'button'; btn.setAttribute('aria-label', 'Reproduzir ' + d[0]);
+    btn.addEventListener('click', function () { track.style.setProperty('--track-w', track.clientWidth + 'px'); track.classList.toggle('go'); });
+    wrap.appendChild(btn); wrap.appendChild(track); td.appendChild(wrap); tr.appendChild(td);
+    document.querySelector('#durations tbody').appendChild(tr);
+  });
+  [['ease-standard', [0.2, 0, 0, 1], 'Mudanças dentro da tela'], ['ease-enter', [0, 0, 0.2, 1], 'O que aparece: popover, modal, toast'], ['ease-exit', [0.4, 0, 1, 1], 'O que sai ou fecha'], ['ease-emphasized', [0.16, 1, 0.3, 1], 'Só site: seções e destaques']].forEach(function (e) {
+    var p = e[1], W = 64, H = 48, pad = 4;
+    function X(v) { return pad + v * (W - 2 * pad); } function Y(v) { return H - pad - v * (H - 2 * pad); }
+    var d = 'M' + X(0) + ' ' + Y(0) + ' C' + X(p[0]) + ' ' + Y(p[1]) + ' ' + X(p[2]) + ' ' + Y(p[3]) + ' ' + X(1) + ' ' + Y(1);
+    var tr = el('tr');
+    tr.appendChild(el('td', '', '<span class="label" style="display:block">' + e[0] + '</span><span class="caption meta mono" style="font-size:12px;line-height:16px">' + p.join(', ') + '</span>'));
+    tr.appendChild(el('td', '', '<svg class="curve" viewBox="0 0 64 48" role="img" aria-label="Curva ' + e[0] + '"><path class="g" d="M' + X(0) + ' ' + Y(0) + ' L' + X(1) + ' ' + Y(1) + '"/><path class="c" d="' + d + '"/></svg>'));
+    tr.appendChild(el('td', 'small muted', e[2]));
+    document.querySelector('#easings tbody').appendChild(tr);
+  });
+
+  /* ---------- tema ---------- */
+  function setTheme(t) {
+    root.setAttribute('data-theme', t);
+    document.querySelectorAll('[data-set-theme]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-set-theme') === t)); });
+  }
+  document.querySelectorAll('[data-set-theme]').forEach(function (b) { b.addEventListener('click', function () { setTheme(b.getAttribute('data-set-theme')); }); });
+  setTheme(root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+  if (reduce) document.querySelectorAll('.dot').forEach(function (d) { d.style.transition = 'none'; });
+})();
+</script>
+</body>
+</html>

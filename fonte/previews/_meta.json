@@ -1,0 +1,316 @@
+{
+  "bundleOrder": [
+    "Button",
+    "IconButton",
+    "TextField",
+    "Textarea",
+    "Select",
+    "MultiSelect",
+    "Combobox",
+    "DateField",
+    "TimeField",
+    "Calendar",
+    "Checkbox",
+    "ChoiceGroup",
+    "Radio",
+    "Switch",
+    "Modal",
+    "ConfirmDialog",
+    "Drawer",
+    "Menu",
+    "Tooltip",
+    "InfoTip",
+    "Badge",
+    "StatusDot",
+    "Tag",
+    "Chip",
+    "FilterChip",
+    "Alert",
+    "Toast",
+    "ToastProvider",
+    "Tabs",
+    "SegmentedControl",
+    "Accordion",
+    "Avatar",
+    "Link",
+    "Skeleton",
+    "Spinner",
+    "ProgressBar",
+    "EmptyState",
+    "Card",
+    "Sidebar",
+    "PageHeader",
+    "DataTable",
+    "FilterBar",
+    "Pagination",
+    "KpiCard",
+    "SiteHeader",
+    "Hero",
+    "ProductPreview",
+    "Accent",
+    "SectionHeader",
+    "LogoStrip",
+    "Marquee",
+    "Testimonial",
+    "TestimonialStrip",
+    "Stars",
+    "FeatureTabs",
+    "LeadForm",
+    "ScheduleModal",
+    "CtaBanner",
+    "Faq",
+    "SiteFooter",
+    "Icon"
+  ],
+  "cards": {
+    "Button": {
+      "group": "Ações",
+      "height": 900,
+      "subtitle": "Primário, secundário, terciário, perigo e sucesso"
+    },
+    "IconButton": {
+      "group": "Ações",
+      "height": 700,
+      "subtitle": "Padrão, tonal e ghost · 32 e 40"
+    },
+    "Link": {
+      "group": "Ações",
+      "height": 360,
+      "subtitle": "Inline e externo"
+    },
+    "TextField": {
+      "group": "Formulário",
+      "height": 1200,
+      "subtitle": "Input e textarea com rótulo, ajuda e erro"
+    },
+    "Select": {
+      "group": "Formulário",
+      "height": 900,
+      "subtitle": "Uma opção numa lista curta"
+    },
+    "MultiSelect": {
+      "group": "Formulário",
+      "height": 800,
+      "subtitle": "Várias opções como etiquetas"
+    },
+    "Combobox": {
+      "group": "Formulário",
+      "height": 900,
+      "subtitle": "Busca em listas longas"
+    },
+    "DateField": {
+      "group": "Formulário",
+      "height": 1100,
+      "subtitle": "Data, intervalo e hora"
+    },
+    "Checkbox": {
+      "group": "Formulário",
+      "height": 700
+    },
+    "Radio": {
+      "group": "Formulário",
+      "height": 600
+    },
+    "Switch": {
+      "group": "Formulário",
+      "height": 600
+    },
+    "Modal": {
+      "group": "Sobreposições",
+      "height": 1800,
+      "subtitle": "480 · 640 · 880 · 1120, confirmação e tela cheia"
+    },
+    "Drawer": {
+      "group": "Sobreposições",
+      "height": 900
+    },
+    "Tooltip": {
+      "group": "Sobreposições",
+      "height": 500,
+      "subtitle": "Tooltip e ícone de informação"
+    },
+    "Alert": {
+      "group": "Feedback",
+      "height": 1000,
+      "subtitle": "Alerta e banner"
+    },
+    "Toast": {
+      "group": "Feedback",
+      "height": 800
+    },
+    "Spinner": {
+      "group": "Feedback",
+      "height": 320
+    },
+    "Skeleton": {
+      "group": "Feedback",
+      "height": 420
+    },
+    "ProgressBar": {
+      "group": "Feedback",
+      "height": 520
+    },
+    "EmptyState": {
+      "group": "Feedback",
+      "height": 900
+    },
+    "Badge": {
+      "group": "Exibição",
+      "height": 700,
+      "subtitle": "Badge e ponto de status"
+    },
+    "Tag": {
+      "group": "Exibição",
+      "height": 600
+    },
+    "Chip": {
+      "group": "Exibição",
+      "height": 600,
+      "subtitle": "Filtro rápido e filtro ativo"
+    },
+    "Avatar": {
+      "group": "Exibição",
+      "height": 480
+    },
+    "Card": {
+      "group": "Exibição",
+      "height": 900,
+      "subtitle": "Plano, elevado e interativo"
+    },
+    "Tabs": {
+      "group": "Navegação",
+      "height": 560
+    },
+    "SegmentedControl": {
+      "group": "Navegação",
+      "height": 480
+    },
+    "Accordion": {
+      "group": "Navegação",
+      "height": 700
+    },
+    "Sidebar": {
+      "group": "Produto",
+      "height": 1920,
+      "subtitle": "Logo, lupa que filtra as telas e recolher na borda"
+    },
+    "PageHeader": {
+      "group": "Produto",
+      "height": 700
+    },
+    "DataTable": {
+      "group": "Produto",
+      "height": 2600,
+      "subtitle": "Densa e confortável, ordenação, seleção, expansão, vazio, carregando, mobile"
+    },
+    "FilterBar": {
+      "group": "Produto",
+      "height": 2080,
+      "subtitle": "Busca, filtros e atalhos no popover, chips dos ativos"
+    },
+    "KpiCard": {
+      "group": "Produto",
+      "height": 640
+    },
+    "Menu": {
+      "group": "Sobreposições",
+      "height": 700,
+      "subtitle": "Ações em menu suspenso"
+    },
+    "Pagination": {
+      "group": "Produto",
+      "height": 1040,
+      "subtitle": "Intervalo, página atual e primeira, anterior, próxima e última"
+    },
+    "TelaContatos": {
+      "group": "Telas",
+      "page": true,
+      "width": 1360,
+      "height": 2900,
+      "subtitle": "Lista com filtros, chips ativos, seleção, paginação e vazio · claro e escuro"
+    },
+    "TelaContatosMobile": {
+      "group": "Telas",
+      "page": true,
+      "width": 1360,
+      "height": 1800,
+      "subtitle": "A mesma lista no celular: a tabela vira cards"
+    },
+    "TelaNovoContato": {
+      "group": "Telas",
+      "page": true,
+      "width": 1360,
+      "height": 3800,
+      "subtitle": "Modal de formulário com validação, erro, salvando e sucesso"
+    },
+    "TelaPlanos": {
+      "group": "Telas",
+      "page": true,
+      "width": 1360,
+      "height": 2200,
+      "subtitle": "Meu plano · sempre no tema claro"
+    },
+    "SiteHeader": {
+      "group": "Marketing",
+      "height": 700,
+      "subtitle": "Links, CTA em pílula e menu no celular"
+    },
+    "Hero": {
+      "group": "Marketing",
+      "height": 2200,
+      "subtitle": "Escuro com malha e brilho ou claro; preview do produto; destaque em serif"
+    },
+    "SectionHeader": {
+      "group": "Marketing",
+      "height": 600,
+      "subtitle": "Eyebrow, título e subtítulo"
+    },
+    "LogoStrip": {
+      "group": "Marketing",
+      "height": 420,
+      "subtitle": "Faixa de logos com rolagem contínua e pausa"
+    },
+    "TestimonialStrip": {
+      "group": "Marketing",
+      "height": 900,
+      "subtitle": "Depoimento e faixa de depoimentos"
+    },
+    "FeatureTabs": {
+      "group": "Marketing",
+      "height": 1500,
+      "subtitle": "Recursos em abas com autoplay pausável"
+    },
+    "LeadForm": {
+      "group": "Marketing",
+      "height": 2400,
+      "subtitle": "Em seção e em modal de agendamento por etapas"
+    },
+    "CtaBanner": {
+      "group": "Marketing",
+      "height": 800,
+      "subtitle": "CTA escuro com brilho de marca"
+    },
+    "Faq": {
+      "group": "Marketing",
+      "height": 700
+    },
+    "SiteFooter": {
+      "group": "Marketing",
+      "height": 1300
+    },
+    "TelaLanding": {
+      "group": "Telas",
+      "page": true,
+      "width": 1520,
+      "height": 7000,
+      "subtitle": "Landing completa · desktop"
+    },
+    "TelaLandingMobile": {
+      "group": "Telas",
+      "page": true,
+      "width": 1360,
+      "height": 4200,
+      "subtitle": "Landing completa · celular"
+    }
+  }
+}

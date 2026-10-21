@@ -1,0 +1,68 @@
+<!-- @dsCard group="Sobreposições" height=1800 subtitle="480 · 640 · 880 · 1120, confirmação e tela cheia" -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modal</title>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(() => {
+  // src/react-shim.ts
+  var React = window.React, ReactDOM = window.ReactDOM;
+
+  // previews/_doc.tsx
+  var T = window.TOU, DOC_CSS = `
+html,body{margin:0;background:var(--bg-page);}
+body{font-family:var(--font-sans);color:var(--text);font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased;}
+.doc-theme{background:var(--bg-page);color:var(--text);padding:20px 24px 28px;}
+.doc-theme+.doc-theme{border-top:1px solid var(--border);}
+.doc-tl{display:flex;align-items:center;gap:8px;font-size:11px;line-height:16px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin:0 0 16px;}
+.doc-tl::after{content:"";flex:1;height:1px;background:var(--border);}
+.doc-h{font-size:13px;line-height:18px;font-weight:600;color:var(--text-secondary);margin:20px 0 10px;}
+.doc-h:first-of-type{margin-top:0;}
+.doc-matrix{display:grid;gap:12px 16px;align-items:center;overflow-x:auto;padding:4px;margin:-4px;}
+.doc-col{font-size:12px;line-height:16px;color:var(--text-tertiary);font-weight:500;}
+.doc-rl{font-size:12px;line-height:16px;color:var(--text-secondary);font-weight:500;}
+.doc-flex{display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+.doc-flex-top{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;}
+.doc-grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px;align-items:start;}
+.doc-grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 24px;align-items:start;}
+.doc-grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 20px;align-items:start;}
+@media (max-width:720px){.doc-grid2,.doc-grid3,.doc-grid4{grid-template-columns:1fr;}}
+.doc-cap{display:block;font-size:12px;line-height:16px;color:var(--text-tertiary);margin-top:6px;}
+.doc-box{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;}
+.doc-pad{padding-bottom:var(--doc-pad,0);}
+.doc-note{font-size:12px;line-height:16px;color:var(--text-secondary);margin-top:12px;display:flex;gap:6px;align-items:flex-start;}
+`;
+  function Themes({ children, only }) {
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, (only ? [only] : ["light", "dark"]).map((t) => /* @__PURE__ */ React.createElement("section", { key: t, className: "doc-theme", "data-theme": t, "aria-label": t === "light" ? "Tema claro" : "Tema escuro" }, /* @__PURE__ */ React.createElement("p", { className: "doc-tl" }, t === "light" ? "Claro" : "Escuro"), children(t))));
+  }
+  function H({ children }) {
+    return /* @__PURE__ */ React.createElement("p", { className: "doc-h" }, children);
+  }
+  function mount(node) {
+    let el = document.getElementById("root"), style = document.createElement("style");
+    style.textContent = DOC_CSS, document.head.appendChild(style), ReactDOM.createRoot(el).render(node);
+  }
+  var TODAY = new Date(2026, 9, 6);
+
+  // previews/Modal.tsx
+  var { Modal, ConfirmDialog, Button, TextField, Select, Icon } = T, noop = () => {
+  };
+  function ContactForm({ errors }) {
+    return /* @__PURE__ */ React.createElement("div", { className: "tou-form-grid" }, /* @__PURE__ */ React.createElement(TextField, { className: "tou-span-2", label: "Nome", required: !0, value: "Mariana Couto", onChange: noop }), /* @__PURE__ */ React.createElement(TextField, { label: "Número do WhatsApp", required: !0, addonStart: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", { className: "tou-mono" }, "BR +55"), /* @__PURE__ */ React.createElement(Icon, { name: "chevron-down", size: 14 })), value: errors ? "(13) 9970" : "(13) 99700-1201", onChange: noop, error: errors ? "Número incompleto: faltam 4 dígitos." : void 0 }), /* @__PURE__ */ React.createElement(TextField, { label: "E-mail", optional: !0, icon: "mail", value: errors ? "mariana@" : "", placeholder: "nome@empresa.com", onChange: noop, error: errors ? "Digite um e-mail completo." : void 0 }), /* @__PURE__ */ React.createElement(Select, { label: "Etapa do funil", options: [{ value: "lead", label: "Lead" }], value: "lead" }), /* @__PURE__ */ React.createElement(TextField, { label: "Valor do negócio", optional: !0, prefix: "R$", placeholder: "0,00" }));
+  }
+  function Stage({ h, children, w }) {
+    return /* @__PURE__ */ React.createElement("div", { style: { height: h, width: w, maxWidth: "100%" } }, children);
+  }
+  mount(
+    /* @__PURE__ */ React.createElement(Themes, null, () => /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(H, null, "Formulário (640) — rodapé com secundário + primário, fechar fora do título"), /* @__PURE__ */ React.createElement(Stage, { h: 480 }, /* @__PURE__ */ React.createElement(Modal, { inline: !0, open: !0, title: "Novo contato", subtitle: "O contato entra na etapa escolhida e já pode receber mensagens.", footerStart: "* campos obrigatórios", footer: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Button, { variant: "secondary" }, "Cancelar"), /* @__PURE__ */ React.createElement(Button, { iconStart: "check" }, "Adicionar contato")) }, /* @__PURE__ */ React.createElement(ContactForm, null))), /* @__PURE__ */ React.createElement(H, null, "Com erros de validação e salvando"), /* @__PURE__ */ React.createElement(Stage, { h: 500 }, /* @__PURE__ */ React.createElement(Modal, { inline: !0, open: !0, title: "Novo contato", footerStart: "2 campos precisam de atenção", footer: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Button, { variant: "secondary", disabled: !0 }, "Cancelar"), /* @__PURE__ */ React.createElement(Button, { loading: !0 }, "Adicionando…")) }, /* @__PURE__ */ React.createElement(ContactForm, { errors: !0 }))), /* @__PURE__ */ React.createElement("div", { className: "doc-grid2" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(H, null, "Confirmação destrutiva (480)"), /* @__PURE__ */ React.createElement(Stage, { h: 260 }, /* @__PURE__ */ React.createElement(ConfirmDialog, { inline: !0, open: !0, title: "Excluir 3 contatos?", description: "As conversas e o histórico desses contatos também serão excluídos. Não dá para desfazer.", confirmLabel: "Excluir 3 contatos" }))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(H, null, "Confirmação neutra"), /* @__PURE__ */ React.createElement(Stage, { h: 260 }, /* @__PURE__ */ React.createElement(ConfirmDialog, { inline: !0, open: !0, tone: "primary", title: "Transferir para Ana Ribeiro?", description: "A conversa sai da sua fila e Ana recebe uma notificação.", confirmLabel: "Transferir" })))), /* @__PURE__ */ React.createElement("div", { className: "doc-grid2" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(H, null, "Tamanhos"), /* @__PURE__ */ React.createElement("div", { className: "doc-box", style: { display: "flex", flexDirection: "column", gap: 10 } }, [["sm", 480, "Confirmações, ações curtas"], ["md", 640, "Formulários (padrão)"], ["lg", 880, "Formulário em 2 colunas, prévia de template"], ["xl", 1120, "Importação, editor de fluxo"]].map(([s, w, u]) => /* @__PURE__ */ React.createElement("div", { key: s }, /* @__PURE__ */ React.createElement("div", { style: { height: 24, width: `${w / 1120 * 100}%`, borderRadius: 6, background: "var(--primary-soft)", border: "1px solid var(--border-brand)", display: "flex", alignItems: "center", padding: "0 8px", boxSizing: "border-box", fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--text-brand)" } }, s, " · ", w), /* @__PURE__ */ React.createElement("span", { className: "doc-cap" }, u))))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(H, null, "Celular (< 600px): tela cheia, botões dividem o rodapé"), /* @__PURE__ */ React.createElement("div", { style: { width: 360, height: 560, border: "1px solid var(--border)", borderRadius: 16, overflow: "hidden", background: "var(--bg-page)" } }, /* @__PURE__ */ React.createElement(Modal, { inline: !0, fullScreen: !0, open: !0, title: "Novo contato", footer: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Button, { variant: "secondary" }, "Cancelar"), /* @__PURE__ */ React.createElement(Button, null, "Adicionar")) }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 16 } }, /* @__PURE__ */ React.createElement(TextField, { label: "Nome", required: !0, placeholder: "Ex.: Mariana Couto" }), /* @__PURE__ */ React.createElement(TextField, { label: "Número do WhatsApp", required: !0, placeholder: "(13) 99999-9999", icon: "phone" }), /* @__PURE__ */ React.createElement(TextField, { label: "E-mail", optional: !0, icon: "mail", placeholder: "nome@empresa.com" }))))))))
+  );
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+{ "compilerOptions": { "jsx": "react", "declaration": true, "emitDeclarationOnly": true, "outDir": "out/types", "allowUmdGlobalAccess": true, "skipLibCheck": true, "strict": false, "target": "es2018", "moduleResolution": "node", "esModuleInterop": true, "noEmitOnError": false, "types": ["react", "react-dom"] }, "include": ["src/*.tsx", "src/*.ts", "src/globals.d.ts"] }

@@ -1,0 +1,156 @@
+<!-- @dsCard group="Marketing" height=420 subtitle="Faixa de logos com rolagem contínua e pausa" -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LogoStrip</title>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(() => {
+  // src/react-shim.ts
+  var React = window.React, ReactDOM = window.ReactDOM;
+
+  // previews/_doc.tsx
+  var T = window.TOU, DOC_CSS = `
+html,body{margin:0;background:var(--bg-page);}
+body{font-family:var(--font-sans);color:var(--text);font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased;}
+.doc-theme{background:var(--bg-page);color:var(--text);padding:20px 24px 28px;}
+.doc-theme+.doc-theme{border-top:1px solid var(--border);}
+.doc-tl{display:flex;align-items:center;gap:8px;font-size:11px;line-height:16px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin:0 0 16px;}
+.doc-tl::after{content:"";flex:1;height:1px;background:var(--border);}
+.doc-h{font-size:13px;line-height:18px;font-weight:600;color:var(--text-secondary);margin:20px 0 10px;}
+.doc-h:first-of-type{margin-top:0;}
+.doc-matrix{display:grid;gap:12px 16px;align-items:center;overflow-x:auto;padding:4px;margin:-4px;}
+.doc-col{font-size:12px;line-height:16px;color:var(--text-tertiary);font-weight:500;}
+.doc-rl{font-size:12px;line-height:16px;color:var(--text-secondary);font-weight:500;}
+.doc-flex{display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+.doc-flex-top{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;}
+.doc-grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px;align-items:start;}
+.doc-grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 24px;align-items:start;}
+.doc-grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 20px;align-items:start;}
+@media (max-width:720px){.doc-grid2,.doc-grid3,.doc-grid4{grid-template-columns:1fr;}}
+.doc-cap{display:block;font-size:12px;line-height:16px;color:var(--text-tertiary);margin-top:6px;}
+.doc-box{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;}
+.doc-pad{padding-bottom:var(--doc-pad,0);}
+.doc-note{font-size:12px;line-height:16px;color:var(--text-secondary);margin-top:12px;display:flex;gap:6px;align-items:flex-start;}
+`;
+  var TODAY = new Date(2026, 9, 6);
+
+  // previews/_mkt.tsx
+  var MKT_CSS = DOC_CSS + `
+body{padding:24px;background:var(--bg-page)}
+.mk-l{font-size:11px;line-height:16px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin:28px 0 10px}
+.mk-l:first-child{margin-top:0}
+.mk-frame{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--bg-surface)}
+.mk-phone{width:375px;border:1px solid var(--border);border-radius:24px;overflow:hidden;background:var(--bg-surface);flex:none}
+.mk-row{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
+`;
+  function mountMkt(node) {
+    let s = document.createElement("style");
+    s.textContent = MKT_CSS, document.head.appendChild(s), document.documentElement.setAttribute("data-theme", "light"), ReactDOM.createRoot(document.getElementById("root")).render(node);
+  }
+  var L = ({ children }) => /* @__PURE__ */ React.createElement("p", { className: "mk-l" }, children);
+  function Site({ children, mobile, h, pad }) {
+    return /* @__PURE__ */ React.createElement("div", { className: mobile ? "mk-phone" : "mk-frame", style: { height: h, position: "relative" } }, /* @__PURE__ */ React.createElement("div", { className: "tou-site", "data-theme": "light", style: { position: "relative", height: h ? "100%" : void 0, overflow: h ? "hidden" : void 0, padding: pad ? mobile ? "32px 0" : "48px 0" : void 0 } }, children));
+  }
+
+  // previews/_app.tsx
+  var {
+    Sidebar,
+    IconButton,
+    PageHeader,
+    Button,
+    Menu,
+    FilterBar,
+    DataTable,
+    EmptyState,
+    Avatar,
+    Badge,
+    Tag,
+    StatusDot,
+    Icon,
+    Modal,
+    TextField,
+    Select,
+    MultiSelect,
+    DateField,
+    Textarea,
+    Toast,
+    ConfirmDialog,
+    Drawer,
+    Combobox
+  } = T;
+  var TODAY2 = new Date(2026, 9, 6), FIRST = ["Mariana", "Rafael", "Beatriz", "Lucas", "Joana", "Pedro", "Camila", "Thiago", "Larissa", "Gustavo", "Fernanda", "Diego", "Aline", "Bruno", "Patrícia", "Rodrigo", "Juliana", "Eduardo", "Renata", "Marcelo", "Vanessa", "Felipe", "Priscila", "André"], LAST = ["Couto", "Nunes", "Lima", "Ferraz", "Prado", "Albuquerque", "Rocha", "Teixeira", "Barros", "Moura", "Siqueira", "Pacheco", "Antunes", "Viana", "Queiroz", "Freitas"], ORGS = ["Clínica Sorriso Pleno", "Studio Bem Estar", "Odonto Vida Santos", "Instituto Pele Viva"], STAGES = [["Lead", "primary"], ["Lead quente", "warning"], ["Agendado", "info"], ["Compareceu", "success"], ["Contrato", "success"], ["Sem etapa", "neutral"]], TAGS = [["Lead quente", "danger"], ["Retorno", "warning"], ["Cliente", "success"], ["Indicação", "primary"], ["Campanha outubro", "neutral"], ["Implante", "neutral"], ["Clareamento", "neutral"]], OWNERS = ["Ana Ribeiro", "Bruno Sales", "Carla Mendes", "Diego Torres"], QUEUES = ["Recepção", "Agendamentos", "Comercial", "Pós-venda"], CHANNELS = ["WhatsApp API", "WhatsApp API", "WhatsApp Web", "Instagram"], STATUSES = [["Em atendimento", "primary"], ["Pendente", "warning"], ["Concluído", "success"], ["Sem WhatsApp", "danger"]], UPDATED = ["há 2 min", "há 5 min", "há 18 min", "há 1 h", "há 3 h", "ontem", "04/10", "03/10", "01/10", "28/09"];
+  function strip(s) {
+    return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  }
+  var CONTACTS = Array.from({ length: 48 }, (_, i) => {
+    let org = i % 12 === 7 ? ORGS[i / 12 | 0] : null, name = org || `${FIRST[i % FIRST.length]} ${LAST[(i * 7 + 3) % LAST.length]}`, st = STAGES[(i * 5 + 1) % STAGES.length], ss = i % 11 === 4 ? STATUSES[3] : STATUSES[(i * 2 + (i >> 2)) % 3], tags = [];
+    i % 3 === 0 && tags.push(TAGS[i / 3 % TAGS.length | 0]), i % 4 === 1 && tags.push(TAGS[4]), i % 5 === 2 && !tags.find((t) => t[0] === TAGS[1][0]) && tags.push(TAGS[1]);
+    let n = 1001 + i * 137, ddd = i % 6 === 5 ? "11" : "13";
+    return {
+      id: `c${i + 1}`,
+      name,
+      phone: org ? `+55 (${ddd}) 3300-${String(1100 + i * 7).slice(-4)}` : `+55 (${ddd}) 99700-${String(n).slice(-4)}`,
+      email: i % 7 === 3 ? "" : `${strip(name).replace(/[^a-z ]/g, "").split(" ").slice(0, 2).join(".")}@${org ? "empresa.com.br" : "email.com"}`,
+      channel: CHANNELS[(i * 3 + 1) % CHANNELS.length],
+      stage: st[0],
+      stageTone: st[1],
+      tags,
+      owner: OWNERS[i * 3 % OWNERS.length],
+      queue: QUEUES[i * 5 % QUEUES.length],
+      value: st[0] === "Contrato" ? 4800 + i * 731 % 9e3 : st[0] === "Compareceu" ? 850 + i * 97 % 1500 : i % 4 === 0 ? 500 : 0,
+      updated: UPDATED[i % UPDATED.length],
+      status: ss[0],
+      statusTone: ss[1]
+    };
+  });
+  var FILTER_GROUPS = [
+    { id: "tags", label: "Etiquetas", options: TAGS.map(([t]) => ({ value: t, label: t })) },
+    { id: "stage", label: "Etapa", options: STAGES.map(([s]) => ({ value: s, label: s })) },
+    { id: "channel", label: "Canal", options: [{ value: "WhatsApp API", label: "WhatsApp API" }, { value: "WhatsApp Web", label: "WhatsApp Web" }, { value: "Instagram", label: "Instagram" }] },
+    { id: "owner", label: "Responsável", options: OWNERS.map((o) => ({ value: o, label: o })) }
+  ];
+
+  // previews/_landing.tsx
+  var {
+    SiteHeader,
+    Hero,
+    Accent,
+    Button: Button2,
+    ProductPreview,
+    LogoStrip,
+    SectionHeader,
+    FeatureTabs,
+    TestimonialStrip,
+    Testimonial,
+    LeadForm,
+    Faq,
+    CtaBanner,
+    SiteFooter,
+    ScheduleModal,
+    Stars,
+    KpiCard,
+    DataTable: DataTable2,
+    Badge: Badge2,
+    Card,
+    Switch,
+    Alert,
+    Avatar: Avatar2,
+    Tag: Tag2,
+    StatusDot: StatusDot2,
+    Icon: Icon2
+  } = T;
+  var LOGOS = ["Clínica Sorriso Pleno", "Odonto Vida", "Instituto Pele Viva", "Studio Bem Estar", "Clínica Ortomed", "Visão Clara Oftalmologia", "Espaço Harmonia", "Dermacenter"].map((name) => ({ name }));
+
+  // previews/LogoStrip.tsx
+  var { LogoStrip: LogoStrip2 } = T;
+  mountMkt(/* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(L, null, "Rolagem contínua; para no hover, no foco ou no botão de pausa (44px). Com “reduzir movimento”, vira grade parada"), /* @__PURE__ */ React.createElement(Site, { pad: !0 }, /* @__PURE__ */ React.createElement("div", { className: "tou-container" }, /* @__PURE__ */ React.createElement(LogoStrip2, { title: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("b", null, "+50 empresas"), " já transformaram suas operações com o TOU"), logos: LOGOS }))), /* @__PURE__ */ React.createElement(L, null, "Pausada"), /* @__PURE__ */ React.createElement(Site, { pad: !0 }, /* @__PURE__ */ React.createElement("div", { className: "tou-container" }, /* @__PURE__ */ React.createElement(LogoStrip2, { title: "Clínicas que atendem com o TOU", logos: LOGOS, paused: !0 })))));
+})();
+
+</script>
+</body>
+</html>

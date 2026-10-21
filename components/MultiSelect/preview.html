@@ -1,0 +1,68 @@
+<!-- @dsCard group="Formulário" height=800 subtitle="Várias opções como etiquetas" -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MultiSelect</title>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(() => {
+  // src/react-shim.ts
+  var React = window.React, ReactDOM = window.ReactDOM;
+
+  // previews/_doc.tsx
+  var T = window.TOU, DOC_CSS = `
+html,body{margin:0;background:var(--bg-page);}
+body{font-family:var(--font-sans);color:var(--text);font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased;}
+.doc-theme{background:var(--bg-page);color:var(--text);padding:20px 24px 28px;}
+.doc-theme+.doc-theme{border-top:1px solid var(--border);}
+.doc-tl{display:flex;align-items:center;gap:8px;font-size:11px;line-height:16px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin:0 0 16px;}
+.doc-tl::after{content:"";flex:1;height:1px;background:var(--border);}
+.doc-h{font-size:13px;line-height:18px;font-weight:600;color:var(--text-secondary);margin:20px 0 10px;}
+.doc-h:first-of-type{margin-top:0;}
+.doc-matrix{display:grid;gap:12px 16px;align-items:center;overflow-x:auto;padding:4px;margin:-4px;}
+.doc-col{font-size:12px;line-height:16px;color:var(--text-tertiary);font-weight:500;}
+.doc-rl{font-size:12px;line-height:16px;color:var(--text-secondary);font-weight:500;}
+.doc-flex{display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+.doc-flex-top{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;}
+.doc-grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px;align-items:start;}
+.doc-grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 24px;align-items:start;}
+.doc-grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 20px;align-items:start;}
+@media (max-width:720px){.doc-grid2,.doc-grid3,.doc-grid4{grid-template-columns:1fr;}}
+.doc-cap{display:block;font-size:12px;line-height:16px;color:var(--text-tertiary);margin-top:6px;}
+.doc-box{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;}
+.doc-pad{padding-bottom:var(--doc-pad,0);}
+.doc-note{font-size:12px;line-height:16px;color:var(--text-secondary);margin-top:12px;display:flex;gap:6px;align-items:flex-start;}
+`;
+  function Themes({ children, only }) {
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, (only ? [only] : ["light", "dark"]).map((t) => /* @__PURE__ */ React.createElement("section", { key: t, className: "doc-theme", "data-theme": t, "aria-label": t === "light" ? "Tema claro" : "Tema escuro" }, /* @__PURE__ */ React.createElement("p", { className: "doc-tl" }, t === "light" ? "Claro" : "Escuro"), children(t))));
+  }
+  function H({ children }) {
+    return /* @__PURE__ */ React.createElement("p", { className: "doc-h" }, children);
+  }
+  function mount(node) {
+    let el = document.getElementById("root"), style = document.createElement("style");
+    style.textContent = DOC_CSS, document.head.appendChild(style), ReactDOM.createRoot(el).render(node);
+  }
+  var TODAY = new Date(2026, 9, 6);
+
+  // previews/MultiSelect.tsx
+  var { MultiSelect } = T, TAGS = [
+    { value: "quente", label: "Lead quente" },
+    { value: "retorno", label: "Retorno" },
+    { value: "indicacao", label: "Indicação" },
+    { value: "cliente", label: "Cliente" },
+    { value: "campanha", label: "Campanha outubro" },
+    { value: "vip", label: "VIP", disabled: !0 }
+  ];
+  mount(
+    /* @__PURE__ */ React.createElement(Themes, null, () => /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(H, null, "Estados"), /* @__PURE__ */ React.createElement("div", { className: "doc-grid3" }, /* @__PURE__ */ React.createElement(MultiSelect, { label: "Etiquetas", options: TAGS, placeholder: "Adicionar etiquetas", help: "Vazio" }), /* @__PURE__ */ React.createElement(MultiSelect, { label: "Etiquetas", options: TAGS, value: ["quente", "retorno"], help: "Com seleção (cada etiqueta é removível)" }), /* @__PURE__ */ React.createElement(MultiSelect, { label: "Etiquetas", options: TAGS, value: ["quente", "retorno", "indicacao", "cliente", "campanha"], help: "Excesso vira +N" }), /* @__PURE__ */ React.createElement(MultiSelect, { label: "Etiquetas", options: TAGS, value: ["quente"], controlClassName: "is-focus", help: "Foco" }), /* @__PURE__ */ React.createElement(MultiSelect, { label: "Etiquetas", required: !0, options: TAGS, error: "Escolha pelo menos uma etiqueta." }), /* @__PURE__ */ React.createElement(MultiSelect, { label: "Etiquetas", options: TAGS, value: ["cliente"], disabled: !0 })), /* @__PURE__ */ React.createElement(H, null, "Aberto"), /* @__PURE__ */ React.createElement("div", { className: "doc-grid3", style: { minHeight: 360 } }, /* @__PURE__ */ React.createElement(MultiSelect, { label: "Etiquetas", options: TAGS, value: ["quente", "cliente"], open: !0 }))))
+  );
+})();
+
+</script>
+</body>
+</html>

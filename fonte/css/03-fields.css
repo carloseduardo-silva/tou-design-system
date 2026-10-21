@@ -1,0 +1,178 @@
+/* ---------- Campo: rótulo, controle, ajuda/erro ---------- */
+.tou-field { display: flex; flex-direction: column; gap: var(--space-1\.5); min-width: 0; font-family: var(--font-sans); }
+.tou-label { display: flex; align-items: baseline; gap: var(--space-1); font-size: 14px; line-height: 20px; font-weight: 500; color: var(--text); margin-bottom: var(--space-0\.5); }
+.tou-label__req { color: var(--danger); font-weight: 600; }
+.tou-label__opt { color: var(--text-tertiary); font-weight: 400; font-size: 12px; line-height: 16px; }
+.tou-field.is-disabled .tou-label { color: var(--text-disabled); }
+.tou-help { display: flex; align-items: flex-start; gap: var(--space-1); font-size: 12px; line-height: 16px; color: var(--text-secondary); }
+.tou-help .tou-icon { width: 14px; height: 14px; margin-top: 1px; }
+.tou-help--error { color: var(--danger); font-weight: 500; }
+.tou-help__count { margin-left: auto; font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text-tertiary); }
+
+/* controle (caixa do input, select, multiselect, combobox, data) */
+.tou-control {
+  position: relative; display: flex; align-items: center; gap: var(--space-2);
+  min-height: 40px; height: 40px; padding: 0 var(--space-3); width: 100%;
+  background: var(--bg-surface); color: var(--text); border: 1px solid var(--border-control); border-radius: var(--radius-md);
+  font-family: var(--font-sans); font-size: 14px; line-height: 20px; text-align: left;
+  transition: border-color var(--duration-fast) var(--ease-standard), box-shadow var(--duration-fast) var(--ease-standard);
+}
+.tou-control--sm { min-height: 32px; height: 32px; padding: 0 var(--space-2\.5); font-size: 13px; line-height: 18px; }
+.tou-control:hover, .tou-control.is-hover { border-color: var(--text-secondary); }
+.tou-control:focus-within, .tou-control.is-focus, .tou-control.is-open { border-color: var(--focus-ring); outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.tou-control.is-invalid { border-color: var(--danger); }
+.tou-control.is-invalid:focus-within, .tou-control.is-invalid.is-focus { border-color: var(--danger); }
+.tou-control.is-disabled { background: var(--bg-disabled); border-color: var(--border); color: var(--text-disabled); cursor: not-allowed; }
+.tou-control.is-disabled .tou-control__icon, .tou-control.is-disabled .tou-control__addon { color: var(--text-disabled); }
+.tou-control.is-readonly { background: var(--bg-sunken); border-color: var(--border); }
+
+.tou-control__input { flex: 1; min-width: 0; width: 100%; height: 100%; padding: 0; margin: 0; border: 0; outline: 0; background: transparent; color: inherit; font: inherit; }
+.tou-control__input::placeholder { color: var(--text-tertiary); opacity: 1; }
+.tou-control.is-disabled .tou-control__input::placeholder { color: var(--text-disabled); }
+.tou-control__input:disabled { cursor: not-allowed; }
+.tou-control__icon { color: var(--text-tertiary); display: inline-flex; }
+.tou-control__icon .tou-icon { width: 16px; height: 16px; }
+.tou-control__addon { color: var(--text-secondary); white-space: nowrap; display: inline-flex; align-items: center; gap: var(--space-1); }
+.tou-control__addon--start { padding-right: var(--space-2); margin-right: var(--space-0\.5); border-right: 1px solid var(--border); align-self: stretch; }
+.tou-control__addon .tou-mono { font-family: var(--font-mono); }
+.tou-control__clear { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; margin-right: calc(var(--space-1) * -1); border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--text-tertiary); cursor: pointer; }
+.tou-control__clear:hover { background: var(--bg-hover); color: var(--text); }
+.tou-control__clear:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
+.tou-control__clear .tou-icon { width: 14px; height: 14px; }
+
+/* textarea */
+.tou-control--multiline { height: auto; align-items: stretch; padding: var(--space-2\.5) var(--space-3); }
+.tou-control--multiline .tou-control__input { min-height: 80px; resize: vertical; }
+
+/* select (gatilho é um botão) */
+.tou-select__trigger { cursor: pointer; justify-content: space-between; }
+.tou-select__value { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-flex; align-items: center; gap: var(--space-2); }
+.tou-select__value.is-placeholder { color: var(--text-tertiary); }
+.tou-select__chev { color: var(--text-secondary); display: inline-flex; transition: transform var(--duration-base) var(--ease-standard); }
+.tou-select__chev .tou-icon { width: 16px; height: 16px; }
+.tou-control.is-open .tou-select__chev { transform: rotate(180deg); }
+.tou-control.is-disabled .tou-select__chev { color: var(--text-disabled); }
+.tou-control.is-disabled.tou-select__trigger { cursor: not-allowed; }
+
+/* multiselect: chips dentro do controle */
+.tou-control--multi { height: auto; min-height: 40px; padding: var(--space-1) var(--space-2) var(--space-1) var(--space-1); flex-wrap: nowrap; }
+.tou-control--multi .tou-multi__chips { flex: 1; display: flex; flex-wrap: wrap; gap: var(--space-1); min-width: 0; }
+.tou-control--multi .tou-select__value.is-placeholder { padding-left: var(--space-2); }
+
+/* popover de lista (select, multiselect, combobox, filtros) */
+.tou-popover {
+  position: absolute; z-index: 50; min-width: 100%; max-height: 320px; overflow: auto;
+  background: var(--bg-surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md); padding: var(--space-1); font-family: var(--font-sans);
+  animation: tou-pop-in var(--duration-base) var(--ease-enter);
+}
+.tou-popover--static { position: relative; z-index: auto; animation: none; }
+@keyframes tou-pop-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+.tou-listbox { list-style: none; margin: 0; padding: 0; }
+.tou-option {
+  display: flex; align-items: center; gap: var(--space-2); min-height: 36px; padding: var(--space-2) var(--space-2\.5);
+  border-radius: var(--radius-sm); font-size: 14px; line-height: 20px; color: var(--text); cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+.tou-option:hover, .tou-option.is-active { background: var(--bg-hover); }
+.tou-option[aria-selected="true"] { font-weight: 500; }
+.tou-option__check { margin-left: auto; color: var(--text-brand); display: inline-flex; }
+.tou-option__check .tou-icon { width: 16px; height: 16px; }
+.tou-option__body { min-width: 0; flex: 1; }
+.tou-option__meta { display: block; font-size: 12px; line-height: 16px; color: var(--text-tertiary); font-weight: 400; }
+.tou-option[aria-disabled="true"] { color: var(--text-disabled); cursor: not-allowed; background: transparent; }
+.tou-option[aria-disabled="true"] .tou-option__meta { color: var(--text-disabled); }
+.tou-option mark { background: transparent; color: inherit; font-weight: 600; text-decoration: underline; text-decoration-color: var(--text-brand); text-underline-offset: 3px; }
+.tou-listbox__group { padding: var(--space-2) var(--space-2\.5) var(--space-1); font-size: 11px; line-height: 16px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text-tertiary); }
+.tou-listbox__empty { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); padding: var(--space-5) var(--space-3); text-align: center; color: var(--text-secondary); font-size: 13px; line-height: 18px; }
+.tou-listbox__empty .tou-icon { width: 20px; height: 20px; color: var(--text-tertiary); }
+.tou-listbox__sep { height: 1px; background: var(--border); margin: var(--space-1) 0; }
+.tou-popover__search { padding: var(--space-1) var(--space-1) var(--space-2); }
+.tou-popover__foot { display: flex; justify-content: space-between; gap: var(--space-2); padding: var(--space-2) var(--space-1) var(--space-1); margin-top: var(--space-1); border-top: 1px solid var(--border); }
+
+.tou-anchor { position: relative; }
+.tou-anchor > .tou-popover { top: calc(100% + var(--space-1)); left: 0; }
+
+/* ---------- Checkbox e radio ---------- */
+.tou-check { position: relative; display: inline-flex; align-items: flex-start; gap: var(--space-2); min-height: 24px; padding: 2px 0; font-family: var(--font-sans); font-size: 14px; line-height: 20px; color: var(--text); cursor: pointer; }
+.tou-check__input { position: absolute; opacity: 0; width: 16px; height: 16px; margin: 2px 0 0; cursor: inherit; }
+.tou-check__box {
+  flex: none; display: grid; place-items: center; width: 16px; height: 16px; margin-top: 2px;
+  background: var(--bg-surface); border: 1px solid var(--border-control); border-radius: var(--radius-xs); color: var(--text-on-primary);
+  transition: background-color var(--duration-instant) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
+}
+.tou-check__box .tou-icon { width: 12px; height: 12px; stroke-width: 3; }
+.tou-check--radio .tou-check__box { border-radius: var(--radius-pill); }
+.tou-check:hover .tou-check__box, .tou-check.is-hover .tou-check__box { border-color: var(--text-secondary); background: var(--bg-hover); }
+.tou-check__input:focus-visible + .tou-check__box, .tou-check.is-focus .tou-check__box { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.tou-check__input:checked + .tou-check__box, .tou-check:not(.tou-check--radio) .tou-check__input:indeterminate + .tou-check__box,
+.tou-check.is-checked .tou-check__box { background: var(--primary); border-color: var(--primary); }
+.tou-check:hover .tou-check__input:checked + .tou-check__box, .tou-check.is-hover.is-checked .tou-check__box { background: var(--primary-hover); border-color: var(--primary-hover); }
+.tou-check--radio .tou-check__input:checked + .tou-check__box, .tou-check--radio.is-checked .tou-check__box { background: var(--bg-surface); border-color: var(--primary); }
+.tou-check--radio .tou-check__box::after { content: ""; width: 8px; height: 8px; border-radius: var(--radius-pill); background: var(--primary); transform: scale(0); transition: transform var(--duration-instant) var(--ease-standard); }
+.tou-check--radio .tou-check__input:checked + .tou-check__box::after, .tou-check--radio.is-checked .tou-check__box::after { transform: scale(1); }
+.tou-check--radio:hover .tou-check__input:checked + .tou-check__box, .tou-check--radio.is-hover.is-checked .tou-check__box { background: var(--bg-hover); border-color: var(--primary-hover); }
+.tou-check.is-invalid .tou-check__box { border-color: var(--danger); }
+.tou-check.is-disabled { color: var(--text-disabled); cursor: not-allowed; }
+.tou-check.is-disabled .tou-check__box { background: var(--bg-disabled); border-color: var(--border); color: var(--text-disabled); }
+.tou-check.is-disabled .tou-check__input:checked + .tou-check__box, .tou-check.is-disabled.is-checked .tou-check__box { background: var(--bg-disabled); border-color: var(--text-disabled); }
+.tou-check--radio.is-disabled .tou-check__box::after { background: var(--text-disabled); }
+.tou-check__text { display: flex; flex-direction: column; }
+.tou-check__desc { font-size: 13px; line-height: 18px; color: var(--text-secondary); }
+.tou-check.is-disabled .tou-check__desc { color: var(--text-disabled); }
+.tou-check--bare { padding: 4px; min-height: 24px; min-width: 24px; justify-content: center; }
+.tou-check--bare .tou-check__input { margin: 4px 0 0; }
+.tou-check--bare .tou-check__box { margin-top: 0; }
+.tou-choices { display: flex; flex-direction: column; gap: var(--space-1); border: 0; margin: 0; padding: 0; min-width: 0; }
+.tou-choices > legend { padding: 0; }
+.tou-choices--row { flex-direction: row; flex-wrap: wrap; gap: var(--space-1) var(--space-5); }
+
+/* ---------- Switch ---------- */
+.tou-switch { position: relative; display: inline-flex; align-items: flex-start; gap: var(--space-3); min-height: 24px; padding: 2px 0; font-family: var(--font-sans); font-size: 14px; line-height: 20px; color: var(--text); cursor: pointer; }
+.tou-switch__input { position: absolute; opacity: 0; width: 36px; height: 20px; margin: 0; cursor: inherit; }
+.tou-switch__track { position: relative; flex: none; width: 36px; height: 20px; border-radius: var(--radius-pill); background: var(--border-control); transition: background-color var(--duration-instant) var(--ease-standard); }
+.tou-switch__thumb { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: var(--radius-pill); background: #FFFFFF; display: grid; place-items: center; color: var(--primary); box-shadow: 0 1px 2px rgba(1, 20, 31, .2); transition: transform var(--duration-base) var(--ease-standard); }
+.tou-switch__thumb .tou-icon { width: 10px; height: 10px; stroke-width: 3.5; opacity: 0; transition: opacity var(--duration-fast) var(--ease-standard); }
+.tou-switch:hover .tou-switch__track, .tou-switch.is-hover .tou-switch__track { background: var(--text-secondary); }
+.tou-switch__input:checked + .tou-switch__track, .tou-switch.is-checked .tou-switch__track { background: var(--primary); }
+.tou-switch:hover .tou-switch__input:checked + .tou-switch__track, .tou-switch.is-hover.is-checked .tou-switch__track { background: var(--primary-hover); }
+.tou-switch__input:checked + .tou-switch__track .tou-switch__thumb, .tou-switch.is-checked .tou-switch__thumb { transform: translateX(16px); }
+.tou-switch__input:checked + .tou-switch__track .tou-icon, .tou-switch.is-checked .tou-icon { opacity: 1; }
+.tou-switch__input:focus-visible + .tou-switch__track, .tou-switch.is-focus .tou-switch__track { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.tou-switch.is-disabled { color: var(--text-disabled); cursor: not-allowed; }
+.tou-switch.is-disabled .tou-switch__track { background: var(--bg-disabled); box-shadow: inset 0 0 0 1px var(--border); }
+.tou-switch.is-disabled .tou-switch__thumb { background: var(--text-disabled); box-shadow: none; color: var(--bg-disabled); }
+.tou-switch--end { flex-direction: row-reverse; justify-content: space-between; width: 100%; }
+
+/* ---------- Data e hora ---------- */
+.tou-cal { width: 296px; padding: var(--space-3); font-family: var(--font-sans); color: var(--text); }
+.tou-cal__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-2); }
+.tou-cal__title { font-size: 14px; line-height: 20px; font-weight: 600; }
+.tou-cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: var(--space-0\.5); }
+.tou-cal__dow { height: 32px; display: grid; place-items: center; font-size: 12px; line-height: 16px; font-weight: 500; color: var(--text-tertiary); }
+.tou-cal__cell { position: relative; height: 36px; display: grid; place-items: center; }
+.tou-cal__day {
+  position: relative; z-index: 1; width: 36px; height: 36px; border: 1px solid transparent; border-radius: var(--radius-pill);
+  background: transparent; color: var(--text); font: 400 14px/20px var(--font-sans); font-variant-numeric: tabular-nums; cursor: pointer;
+}
+.tou-cal__day:hover, .tou-cal__day.is-hover { background: var(--bg-hover); }
+.tou-cal__day:focus-visible, .tou-cal__day.is-focus { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
+.tou-cal__day.is-outside { color: var(--text-tertiary); }
+.tou-cal__day.is-today { border-color: var(--text-brand); font-weight: 600; color: var(--text-brand); }
+.tou-cal__day[aria-pressed="true"], .tou-cal__day.is-start, .tou-cal__day.is-end { background: var(--primary); color: var(--text-on-primary); font-weight: 600; border-color: var(--primary); }
+.tou-cal__day:disabled { color: var(--text-disabled); text-decoration: line-through; cursor: not-allowed; background: transparent; }
+.tou-cal__cell.is-in-range::before { content: ""; position: absolute; inset: 0; background: var(--primary-soft); }
+.tou-cal__cell.is-range-start::before { content: ""; position: absolute; inset: 0 0 0 50%; background: var(--primary-soft); }
+.tou-cal__cell.is-range-end::before { content: ""; position: absolute; inset: 0 50% 0 0; background: var(--primary-soft); }
+.tou-cal__cell.is-in-range .tou-cal__day { color: var(--text-brand); }
+.tou-cal__foot { display: flex; justify-content: space-between; align-items: center; gap: var(--space-2); margin-top: var(--space-2); padding-top: var(--space-2); border-top: 1px solid var(--border); font-size: 12px; line-height: 16px; color: var(--text-secondary); }
+.tou-times { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-1); padding: var(--space-1); width: 296px; }
+.tou-time { height: 32px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-surface); color: var(--text); font: 400 13px/18px var(--font-mono); cursor: pointer; }
+.tou-time:hover { background: var(--bg-hover); }
+.tou-time[aria-selected="true"] { background: var(--primary); border-color: var(--primary); color: var(--text-on-primary); font-weight: 600; }
+.tou-time:disabled { color: var(--text-disabled); background: var(--bg-disabled); text-decoration: line-through; cursor: not-allowed; }
+.tou-time:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
+
+/* rótulo acessível oculto: só para a busca da barra de filtros (lupa + papel "search" fazem o papel visual) */
+.tou-sr-label > .tou-label { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.tou-sr-label { gap: 0; }
